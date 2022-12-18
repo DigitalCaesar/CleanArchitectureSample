@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Members;
 using Domain.Entities.Tags;
+using Domain.Shared;
 using Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Domain.Entities.Posts;
 /// <summary>
 /// Content to post for public view
 /// </summary>
-public sealed class Post : Entity
+public sealed class Post : AggregateRoot
 {
     private readonly List<Tag> mTags = new();
 
