@@ -8,4 +8,5 @@ namespace Domain.Entities.Posts;
 public interface IPostRepository
 {
     void Insert(Post post);
+    Task<Post> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }

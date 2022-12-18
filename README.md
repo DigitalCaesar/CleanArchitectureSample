@@ -123,6 +123,32 @@ Steps
 Steps
 1. Create base ValueObject
 2. Replace entity property types with specific value types inheriting from ValueObject
+3. Fix references to former properties to create new value objects
+
+### Aggregate Root
+
+Steps
+1. Create a new AggregateRoot base class inheriting from Entity simply as an empty class
+2. Change reference root class for aggregates
+3. Remove ability to retrieve subordinate entities directly (fetch and save as one whole not independently)
+!!! This comes before explaining CQRS or setting up the data layer so a little hard to follow
+
+Considerations
+- Need functioning data layer
+
+### Domain Events
+
+Steps
+1. Add IDomainEvent
+2. Add RaiseDomainEvent method to aggregate base
+3. Use RaiseDomainEvent when events happen in your aggregate entity
+4. Add MediatR to domain
+5. Add INotification to IDomainEvents
+6. Add event handler to application
+
+Considerations:  
+- Need to separate services in handlers (i.e. email service depends on repository to pull posts - what if the database is down)
+- Need outbox pattern
 
 
 ## Credit

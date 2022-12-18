@@ -1,5 +1,4 @@
 ﻿using Domain.Exceptions;
-using System.ComponentModel.DataAnnotations;
 
 namespace Api.Middleware;
 

@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Members;
 using Domain.Entities.Tags;
+using Domain.Events;
 using Domain.Shared;
 using Domain.ValueObjects;
 using System;
@@ -48,6 +49,8 @@ public sealed class Post : AggregateRoot
         Content = content;
         Author = author;
         mTags = tags;
+
+        RaiseDomainEvent(new PostCreatedEvent(id, author.Id));
     }
 
     /// <summary>
