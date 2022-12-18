@@ -24,11 +24,11 @@ internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCom
     public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
         var postName = PostName.Create(request.Name);
-        if (!postName.Successful)
+        if (!postName.Successful || postName.Value is null)
             throw new ValidationException($"The requested name '{request.Name}' is invalid."); //TODO: Add Error info
 
         var postContent = PostContent.Create(request.Content);
-        if (!postContent.Successful)
+        if (!postContent.Successful || postContent.Value is null)
             throw new ValidationException($"The requested post content '{request.Content}' is invalid."); //TODO: Add Error info
 
 
