@@ -75,7 +75,7 @@ Steps
 4. Test each project for expected dependencies
 5. Test each project for unexpected dependencies
 
-### Domain Driven Design
+### Domain Driven Design Refactoring
 
 Steps
 1. Create constructors in entities for exepected values
@@ -85,7 +85,8 @@ Steps
 5. Move logic to methods in entity (i.e. SendInvitation)
 6. Change lists to readonly
 
-### BaseEntity Creation
+### Entity Creation
+This lesson comes after introducing the prebuilt solution that already contains the BaseEntity.  The lesson rewinds the clock and isolates the initial entity creation.
 
 Steps
 1. Add unique identifier
@@ -93,6 +94,29 @@ Steps
 3. Override GetHashCode (use multiple of prime number)
 4. Add IEquatable
 5. Entities inherit from BaseEntity
+
+### Entity Validation
+
+Strategies
+1. Use Exceptions:  Easier debugging with stacktrace
+2. Use Results: More expressive, house errors in catelog, self documenting, but does not halt execution making debugging more difficult
+
+#### Exception Strategy
+
+Steps
+1. Create a base DomainException to identify Domain Exceptions
+2. Create Exceptions inheriting from Domain Exceptions
+3. Throw Exceptions defensively where ever domain state is theatened
+
+#### Results Strategy
+
+Steps
+1. Create base Error
+2. Create base Result
+3. Create base Result<T>
+4. Change return types that reference entities to Result<Entity> types
+5. Replace Exceptions thrown to Result type of Failure with associated Error
+6. Create Errors static class to house all Error types
 
 ## Credit
 Milan Jovanovic
