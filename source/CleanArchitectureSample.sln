@@ -11,19 +11,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Presentation\Api\Api.csproj", "{71A6EFA2-4391-4453-B2F3-698AB5E64900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Core\Application\Application.csproj", "{9D4B1AF3-A2AB-46EE-82DC-91B5CF61D458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Core\Application\Application.csproj", "{9D4B1AF3-A2AB-46EE-82DC-91B5CF61D458}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Core\Domain\Domain.csproj", "{8BC7BB8A-E09C-4E97-9F95-1137CFFD36B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Core\Domain\Domain.csproj", "{8BC7BB8A-E09C-4E97-9F95-1137CFFD36B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Infrastructure\Data\Data.csproj", "{30049CE0-A327-418A-B44F-640FE89BF4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Infrastructure\Data\Data.csproj", "{30049CE0-A327-418A-B44F-640FE89BF4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging", "Infrastructure\Messaging\Messaging.csproj", "{2CDE6D42-74BD-4636-9B7F-F9ED80143DCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging", "Infrastructure\Messaging\Messaging.csproj", "{2CDE6D42-74BD-4636-9B7F-F9ED80143DCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B9993FC0-1F5A-4194-BFC0-5FC0211C43CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectureTests", "..\tests\ArchitectureTest\ArchitectureTests.csproj", "{7C948540-510E-4DF3-A314-DAF7E4E01F3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchitectureTests", "..\tests\ArchitectureTest\ArchitectureTests.csproj", "{7C948540-510E-4DF3-A314-DAF7E4E01F3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure\Infrastructure.csproj", "{7AE1334A-2EE5-4035-9E5C-26EC2217D2F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure\Infrastructure.csproj", "{7AE1334A-2EE5-4035-9E5C-26EC2217D2F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".SolutionItems", "{09ED7A46-1E32-478C-AC73-66353474E56A}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

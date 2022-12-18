@@ -20,12 +20,12 @@ internal sealed class CreatePostCommandHandler // : ICommandHandler<CreatePostCo
 
     public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
-        var Post = new Post(Guid.NewGuid(), request.Name);
+        var NewPost = Post.Create(request.Name, request.Content, request.Author, request.Tags);
 
-        mPostRepository.Insert(Post);
+        mPostRepository.Insert(NewPost);
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Post.Id;
+        return NewPost.Id;
     }
 }
