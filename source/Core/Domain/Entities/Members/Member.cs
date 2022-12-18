@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Roles;
 using Domain.Entities.Tags;
+using Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,19 +21,19 @@ public sealed class Member : Entity
     /// <summary>
     /// The unique user name of the member
     /// </summary>
-    public string Username { get; private set; }
+    public UserName Username { get; private set; }
     /// <summary>
     /// The email address of the member
     /// </summary>
-    public string Email { get; private set; }
+    public Email Email { get; private set; }
     /// <summary>
     /// The first name of the member
     /// </summary>
-    public string FirstName { get; private set; }
+    public FirstName FirstName { get; private set; }
     /// <summary>
     /// The last name of the member
     /// </summary>
-    public string LastName { get; private set; }
+    public LastName LastName { get; private set; }
     /// <summary>
     /// The full name of the member
     /// </summary>
@@ -52,7 +53,7 @@ public sealed class Member : Entity
     /// <param name="firstName">the first name of the user</param>
     /// <param name="lastName">the last name of the user</param>
     /// <param name="roles">a list of roles assigned to the member</param>
-    private Member(Guid id, string username, string email, string firstName, string lastName, List<Role> roles) 
+    private Member(Guid id, UserName username, Email email, FirstName firstName, LastName lastName, List<Role> roles) 
         : base(id)
     {
         Username = username;
@@ -70,7 +71,7 @@ public sealed class Member : Entity
     /// <param name="lastName"></param>
     /// <param name="roles">a list of roles assigned to the member</param>
     /// <returns>a member</returns>
-    public static Member Create(string username, string email, string firstName, string lastName, List<Role> roles)
+    public static Member Create(UserName username, Email email, FirstName firstName, LastName lastName, List<Role> roles)
     {
         var id = Guid.NewGuid();
         return new Member(id, username, email, firstName, lastName, roles);
@@ -85,7 +86,7 @@ public sealed class Member : Entity
     /// <param name="lastName">the last name of the user</param>
     /// <param name="roles">a list of roles assigned to the member</param>
     /// <returns>a member</returns>
-    public static Member Create(Guid id, string username, string email, string firstName, string lastName, List<Role> roles)
+    public static Member Create(Guid id, UserName username, Email email, FirstName firstName, LastName lastName, List<Role> roles)
     {
         return new Member(id, username, email, firstName, lastName, roles);
     }

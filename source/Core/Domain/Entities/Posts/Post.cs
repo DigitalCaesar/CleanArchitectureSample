@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Members;
 using Domain.Entities.Tags;
+using Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,11 +20,11 @@ public sealed class Post : Entity
     /// <summary>
     /// The title of the post
     /// </summary>
-    public string Name { get; private set; }
+    public PostName Name { get; private set; }
     /// <summary>
     /// The content of the post
     /// </summary>
-    public string Content { get; private set; }
+    public PostContent Content { get; private set; }
     /// <summary>
     /// The member that created or owns the post
     /// </summary>
@@ -40,7 +41,7 @@ public sealed class Post : Entity
     /// <param name="name">the title of the post</param>
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
-    private Post(Guid id, string name, string content, Member author, List<Tag> tags) : base(id)
+    private Post(Guid id, PostName name, PostContent content, Member author, List<Tag> tags) : base(id)
     {
         Name = name;
         Content = content;
@@ -55,7 +56,7 @@ public sealed class Post : Entity
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
     /// <returns>a post</returns>
-    public static Post Create(string name, string content, Member author, List<Tag> tags)
+    public static Post Create(PostName name, PostContent content, Member author, List<Tag> tags)
     {
         var id = Guid.NewGuid();
         return new Post(id, name, content, author, tags);
@@ -68,7 +69,7 @@ public sealed class Post : Entity
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
     /// <returns>a post</returns>
-    public static Post Create(Guid id, string name, string content, Member author, List<Tag> tags)
+    public static Post Create(Guid id, PostName name, PostContent content, Member author, List<Tag> tags)
     {
         return new Post(id, name, content, author, tags);
     }

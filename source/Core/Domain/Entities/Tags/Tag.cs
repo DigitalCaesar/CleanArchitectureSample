@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,11 +15,11 @@ public sealed class Tag : Entity
     /// <summary>
     /// The title of the tag
     /// </summary>
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
     /// <summary>
     /// A description of the tag
     /// </summary>
-    public string Description { get; private set; }
+    public Description Description { get; private set; }
 
     /// <summary>
     /// Constructor requires values for all properties
@@ -26,7 +27,7 @@ public sealed class Tag : Entity
     /// <param name="id">the unique identifier to index the tag</param>
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the tag</param>
-    private Tag(Guid id, string name, string description)
+    private Tag(Guid id, Name name, Description description)
         : base(id)
     {
         Name = name;
@@ -38,7 +39,7 @@ public sealed class Tag : Entity
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the tag</param>
     /// <returns>a tag</returns>
-    public static Tag Create(string name, string description)
+    public static Tag Create(Name name, Description description)
     {
         var id = Guid.NewGuid();
         return new Tag(id, name, description);
@@ -50,7 +51,7 @@ public sealed class Tag : Entity
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the tag</param>
     /// <returns>a tag</returns>
-    public static Tag Create(Guid id, string name, string description)
+    public static Tag Create(Guid id, Name name, Description description)
     {
         return new Tag(id, name, description);
     }

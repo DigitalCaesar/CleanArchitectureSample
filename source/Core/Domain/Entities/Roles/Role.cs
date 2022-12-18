@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -11,11 +12,11 @@ public sealed class Role : Entity
     /// <summary>
     /// The title of the Role
     /// </summary>
-    public string Name { get; private set; }
+    public Name Name { get; private set; }
     /// <summary>
     /// A description of the purpose or use
     /// </summary>
-    public string Description { get; private set; }
+    public Description Description { get; private set; }
 
     /// <summary>
     /// Constructor requires values for all properties
@@ -23,7 +24,7 @@ public sealed class Role : Entity
     /// <param name="id">the unique identifier</param>
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the use of the role</param>
-    private Role(Guid id, string name, string description)
+    private Role(Guid id, Name name, Description description)
         : base(id)
     {
         Name = name;
@@ -36,7 +37,7 @@ public sealed class Role : Entity
     /// <param name="name">the title of the Role</param>
     /// <param name="description">a description of the Role</param>
     /// <returns>a Role</returns>
-    public Role Create(string name, string description)
+    public Role Create(Name name, Description description)
     {
         Guid id = Guid.NewGuid();
         return new Role(id, Name, description);
@@ -48,7 +49,7 @@ public sealed class Role : Entity
     /// <param name="name">the title of the Role</param>
     /// <param name="description">a description of the Role</param>
     /// <returns>a Role</returns>
-    public Role Create(Guid id, string name, string description)
+    public Role Create(Guid id, Name name, Description description)
     {
         return new Role(id, Name, description);
     }

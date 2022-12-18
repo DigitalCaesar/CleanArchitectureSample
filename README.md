@@ -118,6 +118,13 @@ Steps
 5. Replace Exceptions thrown to Result type of Failure with associated Error
 6. Create Errors static class to house all Error types
 
+### Primitive Obsession and Value Object
+
+Steps
+1. Create base ValueObject
+2. Replace entity property types with specific value types inheriting from ValueObject
+
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

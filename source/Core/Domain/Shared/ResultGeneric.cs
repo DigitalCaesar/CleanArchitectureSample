@@ -10,7 +10,7 @@ public class Result<T> : Result
 {
     private readonly T? mValue;
 
-    protected internal Result(T? value, bool success, Error error)
+    protected internal Result(bool success, Error error, T? value = default)
         : base(success, error)
     {
         mValue = value;
@@ -24,6 +24,6 @@ public class Result<T> : Result
 
     public static Result<T> Create(T value)
     {
-        return new(value, true, Error.None);
+        return new(true, Error.None, value);
     }
 }

@@ -1,5 +1,8 @@
 ﻿using Domain;
 using Domain.Entities.Posts;
+using Domain.Exceptions;
+using Domain.ValueObjects;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Posts.Commands.CreatePost;
-internal sealed class CreatePostCommandHandler // : ICommandHandler<CreatePostCommand, Guid>
+internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCommand, Guid> // : ICommandHandler<CreatePostCommand, Guid>
 {
     private readonly IPostRepository mPostRepository;
     private readonly IUnitOfWork mUnitOfWork;
@@ -20,7 +23,20 @@ internal sealed class CreatePostCommandHandler // : ICommandHandler<CreatePostCo
 
     public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
-        var NewPost = Post.Create(request.Name, request.Content, request.Author, request.Tags);
+        var postName = PostName.Create(request.Name);
+        if (!postName.Successful)
+            throw new ValidationException($"The requested name '{request.Name}' is invalid."); //TODO: Add Error info
+
+        var postContent = PostContent.Create(request.Content);
+        if (!postContent.Successful)
+            throw new ValidationException($"The requested post content '{request.Content}' is invalid."); //TODO: Add Error info
+
+
+        var NewPost = Post.Create(
+            postName.Value, 
+            postContent.Value, 
+            request.Author, 
+            request.Tags);
 
         mPostRepository.Insert(NewPost);
 
