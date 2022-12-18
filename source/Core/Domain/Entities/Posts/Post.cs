@@ -12,7 +12,7 @@ namespace Domain.Entities.Posts;
 /// <summary>
 /// Content to post for public view
 /// </summary>
-public sealed class Post : BaseEntity
+public sealed class Post : Entity
 {
     private readonly List<Tag> mTags = new();
 
@@ -73,13 +73,20 @@ public sealed class Post : BaseEntity
         return new Post(id, name, content, author, tags);
     }
 
-
+    /// <summary>
+    /// A category to associate to the Post
+    /// </summary>
+    /// <param name="tag">a category to add</param>
     public void AddTag(Tag tag)
     {
         var ExistingTag = mTags.Find(x => x.Name == tag.Name);
         if(ExistingTag is null)
             mTags.Add(tag);
     }
+    /// <summary>
+    /// An existing category to disassociate to the Post
+    /// </summary>
+    /// <param name="tag">a category to remove</param>
     public void RemoveTag(Tag tag)
     {
         var ExistingTag = mTags.Find(x => x.Name == tag.Name);

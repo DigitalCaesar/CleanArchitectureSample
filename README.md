@@ -85,6 +85,15 @@ Steps
 5. Move logic to methods in entity (i.e. SendInvitation)
 6. Change lists to readonly
 
+### BaseEntity Creation
+
+Steps
+1. Add unique identifier
+2. Override Equals
+3. Override GetHashCode (use multiple of prime number)
+4. Add IEquatable
+5. Entities inherit from BaseEntity
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

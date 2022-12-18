@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Roles;
-public sealed class Role : BaseEntity
+public sealed class Role : Entity
 {
     /// <summary>
     /// The title of the Role
@@ -24,8 +24,8 @@ public sealed class Role : BaseEntity
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the use of the role</param>
     private Role(Guid id, string name, string description)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
     }

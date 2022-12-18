@@ -13,7 +13,7 @@ namespace Domain.Entities.Members;
 /// <summary>
 /// An account for a person with access to the system
 /// </summary>
-public sealed class Member : BaseEntity
+public sealed class Member : Entity
 {
     private readonly List<Role> mRoles = new();
 
@@ -52,9 +52,9 @@ public sealed class Member : BaseEntity
     /// <param name="firstName">the first name of the user</param>
     /// <param name="lastName">the last name of the user</param>
     /// <param name="roles">a list of roles assigned to the member</param>
-    private Member(Guid id, string username, string email, string firstName, string lastName, List<Role> roles)
+    private Member(Guid id, string username, string email, string firstName, string lastName, List<Role> roles) 
+        : base(id)
     {
-        Id = id;
         Username = username;
         Email = email;
         FirstName = firstName;
@@ -90,12 +90,20 @@ public sealed class Member : BaseEntity
         return new Member(id, username, email, firstName, lastName, roles);
     }
 
+    /// <summary>
+    /// Enables a new Role for the member
+    /// </summary>
+    /// <param name="role">a role to assign to the member</param>
     public void AddRole(Role role)
     {
         var ExistingItem = mRoles.Find(x => x.Name == role.Name);
         if (ExistingItem is null)
             mRoles.Add(role);
     }
+    /// <summary>
+    /// Disables an existing Role for the member
+    /// </summary>
+    /// <param name="role">a role to remove from the member</param>
     public void RemoveRole(Role role)
     {
         var ExistingItem = mRoles.Find(x => x.Name == role.Name);

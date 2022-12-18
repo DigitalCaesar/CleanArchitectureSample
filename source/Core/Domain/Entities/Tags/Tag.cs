@@ -9,7 +9,7 @@ namespace Domain.Entities.Tags;
 /// <summary>
 /// Categories added to objects
 /// </summary>
-public sealed class Tag : BaseEntity
+public sealed class Tag : Entity
 {
     /// <summary>
     /// The title of the tag
@@ -27,8 +27,8 @@ public sealed class Tag : BaseEntity
     /// <param name="name">the title of the tag</param>
     /// <param name="description">a description of the tag</param>
     private Tag(Guid id, string name, string description)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
     }
