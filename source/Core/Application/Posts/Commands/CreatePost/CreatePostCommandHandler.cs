@@ -38,7 +38,7 @@ internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCom
             request.Author, 
             request.Tags);
 
-        mPostRepository.Insert(NewPost);
+        await mPostRepository.CreateAsync(NewPost, cancellationToken);
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 

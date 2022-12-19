@@ -37,10 +37,10 @@ public sealed class Role : Entity
     /// <param name="name">the title of the Role</param>
     /// <param name="description">a description of the Role</param>
     /// <returns>a Role</returns>
-    public Role Create(Name name, Description description)
+    public static Role Create(Name name, Description description)
     {
         Guid id = Guid.NewGuid();
-        return new Role(id, Name, description);
+        return new Role(id, name, description);
     }
     /// <summary>
     /// Creates a new object automatically adding an Id
@@ -49,8 +49,8 @@ public sealed class Role : Entity
     /// <param name="name">the title of the Role</param>
     /// <param name="description">a description of the Role</param>
     /// <returns>a Role</returns>
-    public Role Create(Guid id, Name name, Description description)
+    public static Role Create(Guid id, Name name, Description description)
     {
-        return new Role(id, Name, description);
+        return new Role(id, name, description);
     }
 }

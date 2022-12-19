@@ -68,6 +68,8 @@ Source Detail
 
 ### Architecture Tests
 
+Architecture tests allow you to perform higher level checks on your solution.  With architecture tests, you can check dependencies to ensure projects are referring to to the right projects/packages.  This can flag unexpected issues if your dependencies change and help to avoid circular references.
+
 Steps
 1. Create XUnit Test
 2. Add NetArchTest.Rules
@@ -76,6 +78,8 @@ Steps
 5. Test each project for unexpected dependencies
 
 ### Domain Driven Design Refactoring
+
+Refactoring starts with a working anemic model to demonstrate steps to change to a more DDD approach.  The idea is that you start with a quick and dirty anemic model and then refactor the system with DDD techniques to improve the system.  
 
 Steps
 1. Create constructors in entities for exepected values
@@ -97,11 +101,15 @@ Steps
 
 ### Entity Validation
 
+At this stage, we talk about validation in terms of our strategy for handling invalid state.  Should we throw an exception if there is a problem or return a result.  Exceptions are easy to debug but hard in production.  Results are hard to debug but easy in production.
+
 Strategies
 1. Use Exceptions:  Easier debugging with stacktrace
 2. Use Results: More expressive, house errors in catelog, self documenting, but does not halt execution making debugging more difficult
 
 #### Exception Strategy
+
+Exceptions can be easier for debugging because the execution will stop at the exception and you will have a stack trace.  This makes debugging easy because you always know where the failure happened immediately.  The downside is you need a try/catch at any point where you call the procedure to avoid creating invalid states and crashing the program.
 
 Steps
 1. Create a base DomainException to identify Domain Exceptions
@@ -109,6 +117,9 @@ Steps
 3. Throw Exceptions defensively where ever domain state is theatened
 
 #### Results Strategy
+
+Results allow you to handle conditions where returning an object may be optional and result in success or failure.  For example, if you search for an entity in the database, it is possible that you retrieve an object or the object is not found.  Results gives you a way to return a null object and check for success in the calling method.  Further, you can return meaningful error statements that describe what happened.  
+The downside is returning a Result type is more difficult to debug.  This strategy does not stop execution of the program while debugging.  You need to set breakpoints to track failures and log errors.  Debugging would involve analyzing the logs to determine where the error took place and then setting breakpoints to pause execution in order to analyze the state of the system.  
 
 Steps
 1. Create base Error
@@ -120,12 +131,16 @@ Steps
 
 ### Primitive Obsession and Value Object
 
+Value objects replace primitives as properties on entities.  This allows you to enforce rules that preserve proper state that are not available for the primitive objects.  For example, you may want to ensure that a username is never more than 50 characters.  
+
 Steps
 1. Create base ValueObject
 2. Replace entity property types with specific value types inheriting from ValueObject
 3. Fix references to former properties to create new value objects
 
 ### Aggregate Root
+
+An aggregate root is meant for entities that aggregate multiple other entities together.  The purpose is to manage all related entities as one single transaction rather than breaking them out separately.  For example, if a blog post item contains one or more tags, it is better to load and save them all at once rather than independently.   If the tag fails, then the post will be in an invalid state.  If you handle them all as one transaction, then you can manage invalid states.  
 
 Steps
 1. Create a new AggregateRoot base class inheriting from Entity simply as an empty class
@@ -137,6 +152,8 @@ Considerations
 - Need functioning data layer
 
 ### Domain Events
+
+Domain events allow you to separate the logic of processing a primary action from all the secondary actions that should be triggered after the primary completes.  For example, you may want to send an email notification whenever a new member is added to the system.  The primary action would be to add the member.  The email notification should follow once the member is successfully added.  
 
 Steps
 1. Add IDomainEvent
@@ -150,6 +167,23 @@ Considerations:
 - Need to separate services in handlers (i.e. email service depends on repository to pull posts - what if the database is down)
 - Need outbox pattern
 
+### Data Layer Bonus Round
+
+Added a basic data layer using entity framework and an in memory database.  
+
+Steps
+1. Add any missing IRepositories for entities in the domain layer
+2. Add anemic models to data for each entity
+3. Add mapping from entity to data and from data to entity
+4. Add repositories for each entity (Question:  Only added aggregates.  Should it include all entities?)
+5. Add Data Exceptions
+
+### Outbox Pattern
+
+The outbox pattern is used to make sure events are processed and not lost.  The pattern takes in events and holds them until they can be successfully processed.
+
+Steps
+1. 
 
 ## Credit
 Milan Jovanovic

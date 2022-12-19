@@ -2,11 +2,6 @@
 using Domain.Events;
 using MediatR;
 using Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Events;
 internal sealed class PostCreatedEventHandler : INotificationHandler<PostCreatedEvent>
@@ -14,9 +9,15 @@ internal sealed class PostCreatedEventHandler : INotificationHandler<PostCreated
     private readonly IEmailService mEmailService;
     private readonly IPostRepository mPostRepository;
 
+    public PostCreatedEventHandler(IEmailService emailService, IPostRepository postRepository)
+    {
+        mEmailService = emailService;
+        mPostRepository = postRepository;
+    }
+
     public async Task Handle(PostCreatedEvent notification, CancellationToken cancellationToken)
     {
-        Post Post = await mPostRepository.GetByIdAsync(notification.PostId, cancellationToken);
+        Post? Post = await mPostRepository.GetByIdAsync(notification.PostId, cancellationToken);
 
         if (Post is null)
             return;

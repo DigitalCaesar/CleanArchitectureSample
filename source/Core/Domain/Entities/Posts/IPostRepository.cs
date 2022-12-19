@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace Domain.Entities.Posts;
 public interface IPostRepository
 {
-    void Insert(Post post);
-    Task<Post> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task CreateAsync(Post post, CancellationToken cancellationToken);
+    Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }
