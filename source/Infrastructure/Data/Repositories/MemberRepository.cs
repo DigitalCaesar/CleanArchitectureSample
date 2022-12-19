@@ -15,7 +15,7 @@ public class MemberRepository : IMemberRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
@@ -25,7 +25,7 @@ public class MemberRepository : IMemberRepository
         return ExistingPost;
     }
 
-    public async Task CreateAsync(Member member, CancellationToken cancellationToken)
+    public async Task CreateAsync(Member member, CancellationToken cancellationToken = default)
     {
         Member? ExistingItem = await GetByIdAsync(member.Id, cancellationToken);
         if (ExistingItem is not null)

@@ -17,7 +17,7 @@ internal sealed class GetPostQueryHandler //: IQueryHandler<GetPostByIdQuery, Po
         mDbConnection = dbConnection;
     }
 
-    public async Task<PostResponse> Handle(GetPostByIdQuery request, CancellationToken cancellationToken)
+    public async Task<PostResponse> Handle(GetPostByIdQuery request, CancellationToken cancellationToken = default)
     {
         //NOTE:  Skips Repo for more performance
         const string sql = @"SELECT * FROM ""Webinars"" WHERE ""Id"" = @PostId";

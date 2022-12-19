@@ -15,7 +15,7 @@ internal sealed class PostCreatedEventHandler : INotificationHandler<PostCreated
         mPostRepository = postRepository;
     }
 
-    public async Task Handle(PostCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(PostCreatedEvent notification, CancellationToken cancellationToken = default)
     {
         Post? Post = await mPostRepository.GetByIdAsync(notification.PostId, cancellationToken);
 

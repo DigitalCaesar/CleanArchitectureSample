@@ -21,7 +21,7 @@ internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCom
         mUnitOfWork = unitOfWork;
     }
 
-    public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken = default)
     {
         var postName = PostName.Create(request.Name);
         if (!postName.Successful || postName.Value is null)

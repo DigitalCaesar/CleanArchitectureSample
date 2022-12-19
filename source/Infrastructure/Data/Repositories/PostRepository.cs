@@ -19,7 +19,7 @@ public class PostRepository : IPostRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
@@ -29,7 +29,7 @@ public class PostRepository : IPostRepository
         return ExistingPost;
     }
 
-    public async Task CreateAsync(Post post, CancellationToken cancellationToken)
+    public async Task CreateAsync(Post post, CancellationToken cancellationToken = default)
     {
         Post? ExistingItem = await GetByIdAsync(post.Id, cancellationToken);
         if (ExistingItem is not null)
