@@ -199,7 +199,14 @@ TODO:
 - Handle null event in job
 - Add try/catch for job failures
 
+### BONUS:  Added CQRS for members to allow for Email uniqueness test
 
+
+### Email uniqueness test
+
+
+Steps
+1. 
 
 
 ## Credit
