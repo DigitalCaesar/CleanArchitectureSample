@@ -57,4 +57,27 @@ public class Architecture_Application_Tests : Architecture_Tests
         // Assert
         result.IsSuccessful.Should().BeTrue();
     }
+    [Fact]
+    public void Application_Should_Have_DependOnMediatR()
+    {
+        // Arrange
+        var assembly = typeof(Application.AssemblyReference).Assembly;
+
+        var otherProject = new[]
+        {
+            "MediatR"
+        };
+
+        // Act
+        var result = Types
+            .InAssembly(assembly)
+            .That()
+            .HaveNameEndingWith("Controller")
+            .Should()
+            .HaveDependencyOnAll(otherProject)
+            .GetResult();
+
+        // Assert
+        result.IsSuccessful.Should().BeTrue();
+    }
 }

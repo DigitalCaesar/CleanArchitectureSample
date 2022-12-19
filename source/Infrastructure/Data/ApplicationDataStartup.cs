@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Data.Interceptors;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,13 @@ public static class ApplicationDataStartup
 {
     public static void SetupData(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("CleanArchitectureDb"));        
+        services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
+        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        {
+            var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
+            options.UseInMemoryDatabase("CleanArchitectureDb")
+                .AddInterceptors(interceptor);
+        });        
     }
 
     //public static async Task PopulateDatabase(this IApplicationBuilder webapp)

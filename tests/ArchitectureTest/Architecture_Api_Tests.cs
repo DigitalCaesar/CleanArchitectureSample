@@ -33,27 +33,27 @@ public class Architecture_Api_Tests : Architecture_Tests
         // Assert
         result.IsSuccessful.Should().BeTrue();
     }
-    [Fact]
-    public void Api_Should_Have_DependOnMediatR()
-    {
-        // Arrange
-        var assembly = typeof(Api.AssemblyReference).Assembly;
+    //[Fact]
+    //public void Api_Should_Have_DependOnMediatR()
+    //{
+    //    // Arrange
+    //    var assembly = typeof(Api.AssemblyReference).Assembly;
 
-        var otherProject = new[]
-        {
-            "MediatR"
-        };
+    //    var otherProject = new[]
+    //    {
+    //        "MediatR"
+    //    };
 
-        // Act
-        var result = Types
-            .InAssembly(assembly)
-            .That()
-            .HaveNameEndingWith("Controller")
-            .Should()
-            .HaveDependencyOnAll(otherProject)
-            .GetResult();
+    //    // Act
+    //    var result = Types
+    //        .InAssembly(assembly)
+    //        .That()
+    //        .HaveNameEndingWith("Controller")
+    //        .Should()
+    //        .HaveDependencyOnAll(otherProject)
+    //        .GetResult();
 
-        // Assert
-        result.IsSuccessful.Should().BeTrue();
-    }
+    //    // Assert
+    //    result.IsSuccessful.Should().BeTrue();
+    //}
 }

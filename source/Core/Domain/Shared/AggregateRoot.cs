@@ -10,6 +10,11 @@ public abstract class AggregateRoot : Entity
     private readonly List<IDomainEvent> mDomainEvents = new();
     protected AggregateRoot(Guid id) : base(id) { }
 
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => mDomainEvents.ToList();
+
+    public void ClearDomainEvents() => mDomainEvents.Clear();
+
+
     protected void RaiseDomainEvent(IDomainEvent @event)
     {
         mDomainEvents.Add(@event);

@@ -183,7 +183,19 @@ Steps
 The outbox pattern is used to make sure events are processed and not lost.  The pattern takes in events and holds them until they can be successfully processed.
 
 Steps
-1. 
+1. Add an OutboxMessage to persistence to store events to the database
+2. Add methods to Get and Clear the events from the aggregate root
+3. Create an interceptor to get the events from the aggregate, clear the events from the aggregate, and store them to the database.
+4. Wire up the interceptor in the dbContext initialization
+5. Add Quartz package for background jobs (job scheduler) to Infrastructure layer
+6. Add Outbox Job processing
+7. Need to wrap in try/catch for when job failures occur
+8. Add Quartz.Extensions.DependencyInjection to app
+9. Add Quartz Startup
+
+TODO:  
+- Handle null event in job
+- Add try/catch for job failures
 
 ## Credit
 Milan Jovanovic
