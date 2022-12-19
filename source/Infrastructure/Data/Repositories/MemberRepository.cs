@@ -4,6 +4,7 @@ using Data.Models;
 using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.Members;
+using Domain.ValueObjects;
 
 namespace Data.Repositories;
 public class MemberRepository : IMemberRepository
@@ -35,5 +36,16 @@ public class MemberRepository : IMemberRepository
 
         await mDataContext.Members.AddAsync(NewMember);
         await mDataContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken)
+    {
+        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Email == email.Value);
+        return (RawData is null);
+    }
+    public async Task<bool> IsUsernameUniqueAsync(UserName username, CancellationToken cancellationToken)
+    {
+        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Username == username.Value);
+        return (RawData is null);
     }
 }

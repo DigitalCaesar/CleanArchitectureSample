@@ -205,8 +205,22 @@ TODO:
 ### Email uniqueness test
 
 
+Strategies
+1. Check for uniqueness in the create handler
+	a. Pros:  Simple solution where repository and entity are available
+	b. Cons:  Need to remember to do the check where ever you access.
+2. Check for uniqueness in the entity
+	a. Pros:  Single entry point for creation will always check without needing to remember
+	b. Cons:  Requires passing the repository to the entity (not good form)
+3. Check for uniqueness in the hanlder and pass result to the entity
+	a. Pros:  Keeps it simple without mixing repo/entity
+	b. Cons:  Need to remember to do the uniqueness check and pass result to entity, easily bypassed and forgotten
+4. Check in Repo
+	a. Pros:  Avoids passing dependencies, cleaner
+	b. Cons:  Need to remember to check update and other methods, requires try/catch or handling above
+
 Steps
-1. 
+
 
 
 ## Credit

@@ -22,7 +22,7 @@ internal sealed class CreateMemberCommandHandler //: IRequestHandler<CreatePostC
         mUnitOfWork = unitOfWork;
     }
 
-    public async Task<Guid> Handle(CreateMemberCommand request, CancellationToken cancellationToken = default)
+    public async Task<Unit> Handle(CreateMemberCommand request, CancellationToken cancellationToken = default)
     {
         var userName = UserName.Create(request.Username);
         if (!userName.Successful || userName.Value is null)
@@ -40,6 +40,15 @@ internal sealed class CreateMemberCommandHandler //: IRequestHandler<CreatePostC
         if (!lastName.Successful || lastName.Value is null)
             throw new ValidationException($"The requested name '{request.LastName}' is invalid."); //TODO: Add Error info
 
+        //TODO:  Find a better strategy for uniqueness check
+        if(await mMemberRepository.IsEmailUniqueAsync(email.Value, cancellationToken))
+        {
+            return Unit.Value;
+        }
+        if (await mMemberRepository.IsUsernameUniqueAsync(userName.Value, cancellationToken))
+        {
+            return Unit.Value;
+        }
 
         var NewItem = Member.Create(
             userName.Value, 
@@ -52,6 +61,6 @@ internal sealed class CreateMemberCommandHandler //: IRequestHandler<CreatePostC
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return NewItem.Id;
+        return Unit.Value;
     }
 }
