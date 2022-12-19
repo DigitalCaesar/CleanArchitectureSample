@@ -182,6 +182,8 @@ Steps
 
 The outbox pattern is used to make sure events are processed and not lost.  The pattern takes in events and holds them until they can be successfully processed.
 
+When an action completes on an aggregate, it should raise an event.  An background job will periodically scan for events, pull them from the aggregate, store them to the datastore, handle them, and marked them complete.  
+
 Steps
 1. Add an OutboxMessage to persistence to store events to the database
 2. Add methods to Get and Clear the events from the aggregate root
@@ -196,6 +198,9 @@ Steps
 TODO:  
 - Handle null event in job
 - Add try/catch for job failures
+
+
+
 
 ## Credit
 Milan Jovanovic
