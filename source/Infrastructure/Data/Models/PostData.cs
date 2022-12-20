@@ -18,6 +18,6 @@ public class PostData
     public string Content { get; set; } = string.Empty;
     public Guid AuthorId { get; set; }
     [ForeignKey(nameof(AuthorId))]
-    public Member? Author { get; set; }
+    public MemberData? Author { get; set; }
     public virtual ICollection<TagData> Tags { get; set; } = new List<TagData>();
 }

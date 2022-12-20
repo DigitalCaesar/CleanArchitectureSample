@@ -22,8 +22,6 @@ public class Architecture_Domain_Tests
     {
 
         // Arrange
-        var assembly = typeof(Domain.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             ApplicationNamespace,
@@ -34,7 +32,7 @@ public class Architecture_Domain_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Domain.AssemblyReference.Assembly)
             .ShouldNot()
             .HaveDependencyOnAll(otherProject)
             .GetResult();

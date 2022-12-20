@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Quartz;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Infrastructure.BackgroundJobs;
 
@@ -23,16 +22,17 @@ public class ProcessOutboxMessagesJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        List<OutboxMessage> messages = await dbContext
-            .Set<OutboxMessage>()
+        List<DomainEventData> messages = await dbContext
+            .Set<DomainEventData>()
             .Where(m => m.ProcessedOnUtc == null)
             .Take(20)
             .ToListAsync(context.CancellationToken);
 
-        foreach(OutboxMessage message in messages)
+        // TODO: Wrap in try/catch.  If it fails, increment a failure counter, after x failures notify the admin, after x+y failures stop executing
+        foreach(DomainEventData message in messages)
         {
-            var domainEvent = JsonConvert
-                .DeserializeObject<IDomainEvent>(message.Content);
+            IDomainEvent? domainEvent = JsonConvert
+                .DeserializeObject<IDomainEvent>(message.Content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
             if (domainEvent is null)
                 continue; //TODO: Need to handle null better than this, log 

@@ -185,7 +185,7 @@ The outbox pattern is used to make sure events are processed and not lost.  The 
 When an action completes on an aggregate, it should raise an event.  An background job will periodically scan for events, pull them from the aggregate, store them to the datastore, handle them, and marked them complete.  
 
 Steps
-1. Add an OutboxMessage to persistence to store events to the database
+1. Add an OutboxMessage to persistence to store events to the database (Add model, include in DbSet)
 2. Add methods to Get and Clear the events from the aggregate root
 3. Create an interceptor to get the events from the aggregate, clear the events from the aggregate, and store them to the database.
 4. Wire up the interceptor in the dbContext initialization
@@ -198,6 +198,15 @@ Steps
 TODO:  
 - Handle null event in job
 - Add try/catch for job failures
+
+ISSUE
+- The outbox pattern implemented on the entity with separate data model does not work when using the interception method -> You intercept the model, not the entity
+- Complex interaction here.  Need to remember where to raise the event and ensure single point of entry
+
+Strategies
+- RaiseEvents on Model, intercept in EntityFramework, and save/clear messages
+- 
+
 
 ### BONUS:  Added CQRS for members to allow for Email uniqueness test
 
@@ -221,7 +230,28 @@ Strategies
 
 Steps
 
+### BONUS: API
 
+Notes
+- Using base ApiController with ISender in constructor does not work with EndPointDefinition scanning.  Remove and inject in method.
+
+
+### CQRS
+
+Command Query Responsibility Segregation separates the read only queries from the write commands.  It allows you to keep the logic separate.  It allows you to separate the backend database to potentially have a different database for online rights and offline reads for better performance. 
+
+Notes
+- Uses Assembly reference static classes
+- Separates ApiController from Api project
+- Uses Screwter library to scann infrastructure and persisitence to register services
+- Base API controller (ISender to send commands to mediatr (can also use publisher))
+- Nothing was wired up so it is complicated to get started.  Need to have a session just on wiring up without requiring a bunch of outside packages.
+
+Steps
+1. Add ICommand inheriting from IRequest to abstract MediatR
+2. Add ICommand<Result> inheriting from IRequest<Result> to enforce returning a result type
+3. Add ICommandHandler to abstract MediatR
+4. Add Assembly reference static class to all projects 
 
 ## Credit
 Milan Jovanovic

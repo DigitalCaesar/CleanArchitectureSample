@@ -14,8 +14,6 @@ public class Architecture_Application_Tests : Architecture_Tests
     {
 
         // Arrange
-        var assembly = typeof(Application.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             InfrastructureNamespace,
@@ -25,7 +23,7 @@ public class Architecture_Application_Tests : Architecture_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Application.AssemblyReference.Assembly)
             .ShouldNot()
             .HaveDependencyOnAll(otherProject)
             .GetResult();
@@ -38,8 +36,6 @@ public class Architecture_Application_Tests : Architecture_Tests
     {
 
         // Arrange
-        var assembly = typeof(Application.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             DomainNamespace
@@ -47,7 +43,7 @@ public class Architecture_Application_Tests : Architecture_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Application.AssemblyReference.Assembly)
             .That()
             .HaveNameEndingWith("Handler")
             .Should()
@@ -61,8 +57,6 @@ public class Architecture_Application_Tests : Architecture_Tests
     public void Application_Should_Have_DependOnMediatR()
     {
         // Arrange
-        var assembly = typeof(Application.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             "MediatR"
@@ -70,7 +64,7 @@ public class Architecture_Application_Tests : Architecture_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Application.AssemblyReference.Assembly)
             .That()
             .HaveNameEndingWith("Controller")
             .Should()

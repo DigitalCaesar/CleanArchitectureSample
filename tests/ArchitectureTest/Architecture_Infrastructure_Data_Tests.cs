@@ -14,8 +14,6 @@ public class Architecture_Infrastructure_Data_Tests : Architecture_Tests
     {
 
         // Arrange
-        var assembly = typeof(Data.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             PresentationNamespace,
@@ -24,7 +22,7 @@ public class Architecture_Infrastructure_Data_Tests : Architecture_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Data.AssemblyReference.Assembly)
             .ShouldNot()
             .HaveDependencyOnAll(otherProject)
             .GetResult();

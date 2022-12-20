@@ -1,16 +1,13 @@
-﻿using Domain;
+﻿using Application.Abstractions.Messaging;
+using Domain;
 using Domain.Entities.Posts;
 using Domain.Exceptions;
+using Domain.Shared;
 using Domain.ValueObjects;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Posts.Commands.CreatePost;
-internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCommand, Guid> // : ICommandHandler<CreatePostCommand, Guid>
+internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostCommand> 
 {
     private readonly IPostRepository mPostRepository;
     private readonly IUnitOfWork mUnitOfWork;
@@ -21,15 +18,14 @@ internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCom
         mUnitOfWork = unitOfWork;
     }
 
-    public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(CreatePostCommand request, CancellationToken cancellationToken = default)
     {
         var postName = PostName.Create(request.Name);
         if (!postName.Successful || postName.Value is null)
-            throw new ValidationException($"The requested name '{request.Name}' is invalid."); //TODO: Add Error info
-
+            return Result.Failure(new Error("PostName", $"The requested name '{request.Name}' is invalid."));
         var postContent = PostContent.Create(request.Content);
         if (!postContent.Successful || postContent.Value is null)
-            throw new ValidationException($"The requested post content '{request.Content}' is invalid."); //TODO: Add Error info
+            return Result.Failure(new Error("PostContent", $"The requested post content '{request.Content}' is invalid."));
 
 
         var NewPost = Post.Create(
@@ -42,6 +38,6 @@ internal sealed class CreatePostCommandHandler //: IRequestHandler<CreatePostCom
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return NewPost.Id;
+        return Result.Success();
     }
 }

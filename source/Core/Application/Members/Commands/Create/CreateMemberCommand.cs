@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Members;
+﻿using Application.Abstractions.Messaging;
+using Domain.Entities.Members;
 using Domain.Entities.Roles;
 using MediatR;
 
@@ -8,4 +9,4 @@ public sealed record CreateMemberCommand(
     string Email,
     string FirstName,
     string LastName,
-    List<Role> Roles); //: ICommand<Guid>;
+    List<Role> Roles) : ICommand; 

@@ -1,20 +1,15 @@
 ﻿using Domain.Entities.Roles;
-using Domain.Entities.Tags;
+using Domain.Events;
+using Domain.Shared;
 using Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Members;
 
 /// <summary>
 /// An account for a person with access to the system
 /// </summary>
-public sealed class Member : Entity
+public sealed class Member : AggregateRoot
 {
     private readonly List<Role> mRoles = new();
 
@@ -43,7 +38,6 @@ public sealed class Member : Entity
     /// </summary>
     public ReadOnlyCollection<Role> Roles => mRoles.AsReadOnly();
 
-
     /// <summary>
     /// Constructor requires values for all properties
     /// </summary>
@@ -53,7 +47,7 @@ public sealed class Member : Entity
     /// <param name="firstName">the first name of the user</param>
     /// <param name="lastName">the last name of the user</param>
     /// <param name="roles">a list of roles assigned to the member</param>
-    private Member(Guid id, UserName username, Email email, FirstName firstName, LastName lastName, List<Role> roles) 
+    public Member(Guid id, UserName username, Email email, FirstName firstName, LastName lastName, List<Role> roles) 
         : base(id)
     {
         Username = username;
@@ -61,6 +55,8 @@ public sealed class Member : Entity
         FirstName = firstName;
         LastName = lastName;
         mRoles = roles;
+
+        RaiseDomainEvent(new MemberCreatedEvent(id));
     }
     /// <summary>
     /// Creates a new member automatically adding an Id

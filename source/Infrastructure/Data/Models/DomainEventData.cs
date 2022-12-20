@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Models;
-public sealed class OutboxMessage
+
+[Table("DomainEvents")]
+public sealed class DomainEventData
 {
     public Guid Id { get; set; }
     public string Type { get; set; } = string.Empty;

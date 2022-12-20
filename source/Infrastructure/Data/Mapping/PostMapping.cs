@@ -31,6 +31,7 @@ internal static class PostMapping
     {
         PostName? Name = PostName.Create(data.Name).Value;
         PostContent? Content = PostContent.Create(data.Content).Value;
+        Member Author = data.Author.Map();
         List<Tag> Tags = data.Tags.Select(x => (Tag)x.Map()).ToList();
 
         if (
@@ -43,7 +44,7 @@ internal static class PostMapping
             data.Id, 
             Name, 
             Content, 
-            data.Author, 
+            Author, 
             Tags);
 
         return NewItem;

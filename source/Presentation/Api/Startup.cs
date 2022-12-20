@@ -15,9 +15,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var presenationAssembly = typeof(Api.AssemblyReference).Assembly;
-        var applicationAssembly = typeof(Application.AssemblyReference).Assembly;
-        services.AddMediatR(applicationAssembly);
+        services.AddMediatR(Application.AssemblyReference.Assembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddFluentValidationAutoValidation();//.AddValidatorsFromAssembly(applicationAssembly);
     }

@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".SolutionItems", "{09ED7A46-1E32-478C-AC73-66353474E56A}"
 	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\nuget.config = ..\nuget.config
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject

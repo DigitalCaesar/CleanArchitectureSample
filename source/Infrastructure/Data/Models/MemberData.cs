@@ -18,4 +18,6 @@ public class MemberData
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public virtual ICollection<RoleData> Roles { get; set; } = new List<RoleData>();
+
+    public MemberData() { }
 }

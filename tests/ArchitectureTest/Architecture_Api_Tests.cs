@@ -14,8 +14,6 @@ public class Architecture_Api_Tests : Architecture_Tests
     {
 
         // Arrange
-        var assembly = typeof(Api.AssemblyReference).Assembly;
-
         var otherProject = new[]
         {
             InfrastructureNamespace,
@@ -25,7 +23,7 @@ public class Architecture_Api_Tests : Architecture_Tests
 
         // Act
         var result = Types
-            .InAssembly(assembly)
+            .InAssembly(Api.AssemblyReference.Assembly)
             .ShouldNot()
             .HaveDependencyOnAll(otherProject)
             .GetResult();
@@ -37,8 +35,6 @@ public class Architecture_Api_Tests : Architecture_Tests
     //public void Api_Should_Have_DependOnMediatR()
     //{
     //    // Arrange
-    //    var assembly = typeof(Api.AssemblyReference).Assembly;
-
     //    var otherProject = new[]
     //    {
     //        "MediatR"
@@ -46,7 +42,7 @@ public class Architecture_Api_Tests : Architecture_Tests
 
     //    // Act
     //    var result = Types
-    //        .InAssembly(assembly)
+    //        .InAssembly(Api.AssemblyReference.Assembly)
     //        .That()
     //        .HaveNameEndingWith("Controller")
     //        .Should()

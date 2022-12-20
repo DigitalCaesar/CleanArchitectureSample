@@ -19,7 +19,10 @@ public static class Startup
                             schedule =>
                             schedule.WithIntervalInSeconds(10)  // Repeat the job every 10 seconds
                                     .RepeatForever()));         // Never stop repeating
+            configure.UseMicrosoftDependencyInjectionJobFactory();
         });
+        services.AddQuartzHostedService();
+
     }
 }
 

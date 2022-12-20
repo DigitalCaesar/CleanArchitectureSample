@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Messaging\" />
     <Folder Include="Abstractions\Data\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Contracts\" />
@@ -21,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Data\Data.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Messaging\Messaging.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
