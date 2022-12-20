@@ -1,6 +1,9 @@
-﻿using Data.Models;
+﻿using Data.Mapping;
+using Data.Models;
 using Domain.Entities.Events;
+using Domain.Entities.Members;
 using Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Data.Repositories;
@@ -33,5 +36,12 @@ public class EventRepository : IEventRepository
 
         // Add Outbox messages
         mDataContext.Set<DomainEventData>().AddRange(OutboxMessages);
+    }
+
+    public async Task<List<IDomainEventData>> GetAll(CancellationToken cancellationToken)
+    {
+        List<DomainEventData> RawData = await mDataContext.DomainEvents.ToListAsync();
+        List<IDomainEventData> MappedData = RawData.ToList<IDomainEventData>();//.Select(x => (IDomainEventData)x);
+        return MappedData;
     }
 }

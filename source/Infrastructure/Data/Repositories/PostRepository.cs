@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Data.Models;
 using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
@@ -39,5 +38,12 @@ public class PostRepository : IPostRepository
 
         await mDataContext.Posts.AddAsync(NewPost);
         await mDataContext.SaveChangesAsync();
+    }
+
+    public async Task<List<Post>> GetAll(CancellationToken cancellationToken = default)
+    {
+        List<PostData> RawData = await mDataContext.Posts.Include(x => x.Author).ToListAsync();
+        List<Post> MappedData = RawData.Select(x => (Post)x.Map()).ToList();
+        return MappedData;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Members.Commands.Create;
 using DigitalCaesar.Server.Api;
+using Domain.Entities.Members;
 using Domain.Entities.Roles;
 using Domain.ValueObjects;
 using MediatR;
@@ -19,6 +20,11 @@ public class MemberController : IEndpointDefinition
             .WithName("RegisterMember")
             .AllowAnonymous()
             .Produces(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
+        webApp.MapGet("/api/members", GetMemberList)
+            .WithName("GetMemberList")
+            .AllowAnonymous()
+            .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
     }
 
@@ -40,5 +46,10 @@ public class MemberController : IEndpointDefinition
 
         //TODO: Convert to Results.Created - requires URL and Created object
         return result.Successful ? Results.Ok() : Results.BadRequest(result.Error);
+    }
+    public async Task<IResult> GetMemberList(IMemberRepository repository, CancellationToken cancellationToken = default)
+    {
+        var Items = repository.GetAll(cancellationToken);
+        return Results.Ok(Items);
     }
 }

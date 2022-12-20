@@ -205,7 +205,7 @@ ISSUE
 
 Strategies
 - RaiseEvents on Model, intercept in EntityFramework, and save/clear messages
-- 
+- Raise events on Entity, use EventRepository
 
 
 ### BONUS:  Added CQRS for members to allow for Email uniqueness test

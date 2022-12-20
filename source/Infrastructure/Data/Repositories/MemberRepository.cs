@@ -38,7 +38,7 @@ public class MemberRepository : IMemberRepository
         await mDataContext.SaveChangesAsync();
     }
 
-    public async Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken)
+    public async Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default)
     {
         MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Email == email.Value);
         return (RawData is null);
@@ -47,5 +47,12 @@ public class MemberRepository : IMemberRepository
     {
         MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Username == username.Value);
         return (RawData is null);
+    }
+
+    public async Task<List<Member>> GetAll(CancellationToken cancellationToken = default)
+    {
+        List<MemberData> RawData = await mDataContext.Members.ToListAsync();
+        List<Member> MappedData = RawData.Select(x => (Member)x.Map()).ToList();
+        return MappedData;
     }
 }
