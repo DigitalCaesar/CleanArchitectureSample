@@ -247,11 +247,24 @@ Notes
 - Base API controller (ISender to send commands to mediatr (can also use publisher))
 - Nothing was wired up so it is complicated to get started.  Need to have a session just on wiring up without requiring a bunch of outside packages.
 
+Query Handler strategies
+- pass context to handler and query
+- query directly with dapper (used in earlier lessons)
+- use the repository (preferred)
+
 Steps
 1. Add ICommand inheriting from IRequest to abstract MediatR
 2. Add ICommand<Result> inheriting from IRequest<Result> to enforce returning a result type
 3. Add ICommandHandler to abstract MediatR
-4. Add Assembly reference static class to all projects 
+4. Add CreateMemberCommand
+5. Add CreateMemberRequest
+6. Add CreateMemberCommandHandler
+7. Add Assembly reference static class to all projects 
+8. Add IQuery
+9. Add IQueryHandler
+10. Add GetMemberByIdQuery
+11. Add GetMemberByIdQueryHandler
+12. Add MemberResponse
 
 ## Credit
 Milan Jovanovic

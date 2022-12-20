@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 
 namespace Data;
 public static class ApplicationDataStartup
@@ -14,7 +15,7 @@ public static class ApplicationDataStartup
             var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
             options.UseInMemoryDatabase("CleanArchitectureDb")
                 .AddInterceptors(interceptor);
-        });        
+        });
     }
 
     //public static async Task PopulateDatabase(this IApplicationBuilder webapp)

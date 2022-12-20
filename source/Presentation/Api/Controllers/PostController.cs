@@ -9,6 +9,7 @@ using Domain.Entities.Tags;
 using Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Api.Controllers;
 
@@ -38,6 +39,7 @@ public sealed class PostController : IEndpointDefinition
     }
     public async Task<IResult> CreatePost(ISender sender, string name, string content, CancellationToken cancellationToken = default)
     {
+        // TODO: Need to add authentication to pickup on author (logged in member) to set the author property
         Member author = Member.Create(UserName.Create("TestAuthor").Value, Email.Create("testauthor@someplace.com").Value, FirstName.Create("Test").Value, LastName.Create("Author").Value, new List<Role> { Role.Create(Name.Create("Author").Value, Description.Create("Author Role").Value) });
         List<Tag> tags = new List<Tag>();
         var command = new CreatePostCommand(name, content, author, tags);

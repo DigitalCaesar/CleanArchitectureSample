@@ -1,10 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Application.Members.Queries;
 
-namespace Application.Members.Queries;
-internal class MemberResponse
-{
-}
+public sealed record MemberResponse(Guid id, string email);

@@ -1,7 +1,11 @@
 ﻿using Application.Members.Commands.Create;
+using Application.Members.Queries;
+using Application.Members.Queries.GetMemberById;
+using Data.Repositories;
 using DigitalCaesar.Server.Api;
 using Domain.Entities.Members;
 using Domain.Entities.Roles;
+using Domain.Shared;
 using Domain.ValueObjects;
 using MediatR;
 
@@ -21,6 +25,11 @@ public class MemberController : IEndpointDefinition
             .AllowAnonymous()
             .Produces(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
+        webApp.MapGet("/api/members/{id}", GetMemberById)
+            .WithName("GetMemberById")
+            .AllowAnonymous()
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members", GetMemberList)
             .WithName("GetMemberList")
             .AllowAnonymous()
@@ -30,7 +39,7 @@ public class MemberController : IEndpointDefinition
 
     public void DefineServices(IServiceCollection services)
     {
-        // No required services
+        services.AddScoped<IMemberRepository, MemberRepository>();
     }
 
     public async Task<IResult> RegisterMember(ISender sender, string username, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
@@ -51,5 +60,13 @@ public class MemberController : IEndpointDefinition
     {
         var Items = repository.GetAll(cancellationToken);
         return Results.Ok(Items);
+    }
+    public async Task<IResult> GetMemberById(ISender sender, Guid id, CancellationToken cancellationToken = default)
+    {
+        var query = new GetMemberByIdQuery(id);
+
+        Result<MemberResponse> response = await sender.Send(query, cancellationToken);
+
+        return response.Successful ? Results.Ok(response.Value) : Results.NotFound(response.Error);
     }
 }
