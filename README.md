@@ -266,6 +266,23 @@ Steps
 11. Add GetMemberByIdQueryHandler
 12. Add MemberResponse
 
+### Validation
+
+Steps
+1. Create an interface to hold bad validation results IValidationResult
+2. Add concrete ValidationResult and ValidationResult<T>
+3. Create Validator class for each command/query
+
+Notes
+- By setting public const in entities, you can share the values need for rules to maintain consistency for example with maximum length
+- Somewhere along the way we created generic Result types, but never added them to our command/queries
+- watch for lazy loading not loading on each query - better way?
+
+Strategies
+- throw an exception and handle in exception handling middleware
+- use MediatR pipeline* to return results
+
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

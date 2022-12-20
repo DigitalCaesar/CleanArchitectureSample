@@ -1,4 +1,6 @@
 ﻿using Application.Members.Commands.Create;
+using Application.Members.Queries.GetMemberById;
+using Application.Members.Queries;
 using Application.Posts.Commands.CreatePost;
 using Data.Repositories;
 using DigitalCaesar.Server.Api;
@@ -6,14 +8,17 @@ using Domain.Entities.Members;
 using Domain.Entities.Posts;
 using Domain.Entities.Roles;
 using Domain.Entities.Tags;
+using Domain.Shared;
 using Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using Application.Posts.Queries;
+using Application.Posts.Queries.GetPostById;
 
 namespace Api.Controllers;
 
-public sealed class PostController : IEndpointDefinition
+public sealed class PostController : ApiController, IEndpointDefinition
 {
     public void DefineEndpoints(IApplicationBuilder app)
     {
@@ -25,6 +30,11 @@ public sealed class PostController : IEndpointDefinition
             .WithName("CreatePost")
             .AllowAnonymous()
             .Produces(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
+        webApp.MapGet("/api/posts/{id}", GetPostById)
+            .WithName("GetPostById")
+            .AllowAnonymous()
+            .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/posts", GetPostList)
             .WithName("GetPostList")
@@ -44,14 +54,26 @@ public sealed class PostController : IEndpointDefinition
         List<Tag> tags = new List<Tag>();
         var command = new CreatePostCommand(name, content, author, tags);
 
-        var result = await sender.Send(command, cancellationToken);
+        Result<Guid> result = await sender.Send(command, cancellationToken);
 
-        //TODO: Convert to Results.Created - requires URL and Created object
-        return result.Successful ? Results.Ok() : Results.BadRequest(result.Error);
+        if (!result.Successful)
+            return HandleFailure(result);
+
+        return Results.Created(
+            $"/api/posts/{result.Value}",
+            result.Value);
     }
     public async Task<IResult> GetPostList(IPostRepository repository, CancellationToken cancellationToken = default)
     {
         var Items = repository.GetAll(cancellationToken);
         return Results.Ok(Items);
+    }
+    public async Task<IResult> GetPostById(ISender sender, Guid id, CancellationToken cancellationToken = default)
+    {
+        var query = new GetPostByIdQuery(id);
+
+        Result<PostResponse> response = await sender.Send(query, cancellationToken);
+
+        return response.Successful ? Results.Ok(response.Value) : Results.NotFound(response.Error);
     }
 }

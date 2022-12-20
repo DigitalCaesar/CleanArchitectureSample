@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Api.Controllers;
 
-public sealed class EventController : IEndpointDefinition
+public sealed class EventController : ApiController, IEndpointDefinition
 {
     public void DefineEndpoints(IApplicationBuilder app)
     {

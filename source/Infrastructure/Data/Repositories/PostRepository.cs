@@ -20,7 +20,7 @@ public class PostRepository : IPostRepository
 
     public async Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
+        PostData? RawData = await mDataContext.Posts.Include(x => x.Author).FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
             return default;
 

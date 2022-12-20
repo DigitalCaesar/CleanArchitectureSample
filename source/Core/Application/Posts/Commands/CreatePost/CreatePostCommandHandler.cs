@@ -7,7 +7,7 @@ using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.Posts.Commands.CreatePost;
-internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostCommand> 
+internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostCommand, Guid> 
 {
     private readonly IPostRepository mPostRepository;
     private readonly IUnitOfWork mUnitOfWork;
@@ -18,14 +18,14 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
         mUnitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(CreatePostCommand request, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> Handle(CreatePostCommand request, CancellationToken cancellationToken = default)
     {
         var postName = PostName.Create(request.Name);
         if (!postName.Successful || postName.Value is null)
-            return Result.Failure(new Error("PostName", $"The requested name '{request.Name}' is invalid."));
+            return Result<Guid>.Failure(new Error("PostName", $"The requested name '{request.Name}' is invalid."));
         var postContent = PostContent.Create(request.Content);
         if (!postContent.Successful || postContent.Value is null)
-            return Result.Failure(new Error("PostContent", $"The requested post content '{request.Content}' is invalid."));
+            return Result<Guid>.Failure(new Error("PostContent", $"The requested post content '{request.Content}' is invalid."));
 
 
         var NewPost = Post.Create(
@@ -38,6 +38,6 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return Result<Guid>.Success(NewPost.Id);
     }
 }

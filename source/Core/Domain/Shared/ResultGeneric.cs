@@ -20,10 +20,22 @@ public class Result<T> : Result
         ? mValue!
         : throw new InvalidOperationException("The value of a failure result cannot be accessed.");
 
-    public static implicit operator Result<T>(T value) => Create(value);
-
-    public static Result<T> Create(T value)
+    public static implicit operator Result<T>(T value)
     {
         return new(true, Error.None, value);
+    }
+    //public static implicit operator Result<T>(T value) => Create(value);
+
+    //public static Result<T> Create(T value)
+    //{
+    //    return new(true, Error.None, value);
+    //}
+    public static Result<T> Success(T value)
+    {
+        return new(true, Error.None, value);
+    }
+    public static new Result<T> Failure(Error error)
+    {
+        return new(false, error);
     }
 }

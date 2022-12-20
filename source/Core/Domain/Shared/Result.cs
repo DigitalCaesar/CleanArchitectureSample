@@ -26,8 +26,8 @@ public class Result
     //public static Result<T> Success<T>(T value) => new(value, Error.None);
     public static Result Failure(Error error) => new(false, error);
     public static Result<T> Failure<T>(Error error) => new(false, error);
-    public static Result Create(bool success, Error error)
-    {
-        return new(success, error);
-    }
+    //public static Result Create(bool success, Error error)
+    //{
+    //    return new(success, error);
+    //}
 }

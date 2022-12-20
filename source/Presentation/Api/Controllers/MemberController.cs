@@ -8,10 +8,11 @@ using Domain.Entities.Roles;
 using Domain.Shared;
 using Domain.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class MemberController : IEndpointDefinition
+public class MemberController : ApiController, IEndpointDefinition
 {
     
     public void DefineEndpoints(IApplicationBuilder app)
@@ -51,10 +52,14 @@ public class MemberController : IEndpointDefinition
             lastName,
             new List<Role>() { Role.Create(Name.Create("Admin").Value, Description.Create("Administrative Users").Value) });
 
-        var result = await sender.Send(command, cancellationToken);
+        Result<Guid> result = await sender.Send(command, cancellationToken);
 
-        //TODO: Convert to Results.Created - requires URL and Created object
-        return result.Successful ? Results.Ok() : Results.BadRequest(result.Error);
+        if(!result.Successful)
+            return HandleFailure(result);
+
+        return Results.Created(
+            $"/api/members/{result.Value}",
+            result.Value);
     }
     public async Task<IResult> GetMemberList(IMemberRepository repository, CancellationToken cancellationToken = default)
     {

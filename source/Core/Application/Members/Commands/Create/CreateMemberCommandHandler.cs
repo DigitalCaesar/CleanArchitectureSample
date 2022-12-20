@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Application.Members.Commands.Create;
-internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberCommand> 
+internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberCommand, Guid> 
 {
     private readonly IMemberRepository mMemberRepository;
     private readonly IEventRepository mEventRepository;
@@ -24,26 +24,26 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
         mEventRepository = eventRepository;
     }
 
-    public async Task<Result> Handle(CreateMemberCommand request, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> Handle(CreateMemberCommand request, CancellationToken cancellationToken = default)
     {
         var userName = UserName.Create(request.Username);
         if (!userName.Successful || userName.Value is null)
-            return Result.Failure(new Error("UserName", $"The requested username '{request.Username}' is invalid."));
+            return Result<Guid>.Failure(new Error("UserName", $"The requested username '{request.Username}' is invalid."));
         var email = Email.Create(request.Email);
         if (!email.Successful || email.Value is null)
-            return Result.Failure(new Error("Email", $"The requested Email '{request.Email}' is invalid."));
+            return Result<Guid>.Failure(new Error("Email", $"The requested Email '{request.Email}' is invalid."));
         var firstName = FirstName.Create(request.FirstName);
         if (!firstName.Successful || firstName.Value is null)
-            return Result.Failure(new Error("FirstName", $"The requested FirstName '{request.FirstName}' is invalid."));
+            return Result<Guid>.Failure(new Error("FirstName", $"The requested FirstName '{request.FirstName}' is invalid."));
         var lastName = LastName.Create(request.LastName);
         if (!lastName.Successful || lastName.Value is null)
-            return Result.Failure(new Error("LastName", $"The requested FirstName '{request.LastName}' is invalid."));
+            return Result<Guid>.Failure(new Error("LastName", $"The requested FirstName '{request.LastName}' is invalid."));
 
         //TODO:  Find a better strategy for uniqueness check
         if(!await mMemberRepository.IsEmailUniqueAsync(email.Value, cancellationToken))
-            return Result.Failure(new Error("Email", "Email must be unique"));
+            return Result<Guid>.Failure(new Error("Email", "Email must be unique"));
         if (!await mMemberRepository.IsUsernameUniqueAsync(userName.Value, cancellationToken))
-            return Result.Failure(new Error("Username", "Username must be unique"));
+            return Result<Guid>.Failure(new Error("Username", "Username must be unique"));
 
         var NewItem = Member.Create(
             userName.Value, 
@@ -57,6 +57,6 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
 
         await mUnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return Result<Guid>.Success(NewItem.Id);
     }
 }

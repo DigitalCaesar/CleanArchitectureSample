@@ -8,4 +8,4 @@ public sealed record CreatePostCommand(
     string Name, 
     string Content, 
     Member Author, 
-    List<Tag> Tags) : ICommand; 
+    List<Tag> Tags) : ICommand<Guid>; 
