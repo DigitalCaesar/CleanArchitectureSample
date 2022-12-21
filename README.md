@@ -320,6 +320,12 @@ Notes:
 - EventHandlers need to reference IDomainEventHandler and IDomainEventHandler needs to reference INotificationHandler - why the complexity?
 - 
 
+### Unit Test Command Handlers
+
+Steps
+1. Make Application library internal visible to test
+2. 
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

@@ -3,6 +3,7 @@ using Domain;
 using Domain.Entities.Events;
 using Domain.Entities.Members;
 using Domain.Entities.Roles;
+using Domain.Errors;
 using Domain.Shared;
 using Domain.ValueObjects;
 
@@ -40,9 +41,9 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
 
         // Check uniqueness
         if(!await mMemberRepository.IsEmailUniqueAsync(email.Value, cancellationToken))
-            return Result<Guid>.Failure(new Error("Email", "Email must be unique"));
+            return Result<Guid>.Failure(DomainErrors.Member.DuplicateEmail(email.Value.ToString()));
         if (!await mMemberRepository.IsUsernameUniqueAsync(userName.Value, cancellationToken))
-            return Result<Guid>.Failure(new Error("Username", "Username must be unique"));
+            return Result<Guid>.Failure(DomainErrors.Member.DuplicateUsername(userName.Value.ToString()));
 
         // Set Default Role
         Role? DefaultRole = await mRoleRepository.GetByName("User", cancellationToken);
