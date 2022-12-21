@@ -8,4 +8,5 @@ namespace Domain.Shared;
 /// </summary>
 public interface IDomainEvent : INotification
 {
+    Guid Id { get; } // TODO: Consider this as generic
 }

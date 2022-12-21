@@ -11,6 +11,7 @@ using Domain.Entities.Roles;
 using Domain.Entities.Tags;
 using FluentValidation;
 using Infrastructure.BackgroundJobs;
+using Infrastructure.Idempotent;
 using MediatR;
 using Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // MediatR
 builder.Services.AddMediatR(Application.AssemblyReference.Assembly);
 builder.Services.AddMediatR(Api.AssemblyReference.Assembly);
+builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
 // Validation
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);

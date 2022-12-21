@@ -14,4 +14,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<RoleData> Roles { get; set; }
 
     public DbSet<DomainEventData> DomainEvents { get; set; }
+    public DbSet<EventConsumer> DomainEventConsumer { get; set; }
 }

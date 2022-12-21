@@ -287,6 +287,39 @@ Strategies
 Notes
 - ValueObjects are too much.  To create, you get a result, you must check if the result was successful, then you must check if the value is null to satisfy the compiler.  Why not just return the value and check for null as success?
 
+### Retry Outbox with Polly
+
+The outbox pattern can fail to process for a variety of reasons.  For example, an email notifier could fail if the email service is temporarily down.  What happens if this condition occurs?  
+
+strategies
+1. try/catch approach
+2. Polly Retry
+
+Steps
+1. Add Polly
+2. Create a retry policy in a background job method
+3. Execute the target method inside the policy
+4. Capture the results
+5. Handle errored results
+
+### Duplicate Message | Idempotent Handler
+
+Avoid duplicating events if retries are used
+
+Steps
+1. Create EventConsumer data class to track each consumer of the event
+2. Add missing IDomainEventHandler
+3. Add missing DomainEvent from IDomainEvent and change events to reference DomainEvents
+4. Create IdempotentDomainEventHandler
+5. Wire up the decorator (using Scrutor package)
+
+
+Notes: 
+- Introduces non-existent IDomainEventHandler
+- Introduces non-existent DomainEvent
+- EventHandlers need to reference IDomainEventHandler and IDomainEventHandler needs to reference INotificationHandler - why the complexity?
+- 
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

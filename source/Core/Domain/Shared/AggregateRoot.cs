@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Domain.Shared;
 public abstract class AggregateRoot : Entity
 {
-    private readonly List<IDomainEvent> mDomainEvents = new();
+    private readonly List<DomainEvent> mDomainEvents = new();
     protected AggregateRoot(Guid id) : base(id) { }
 
-    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => mDomainEvents.ToList();
+    public IReadOnlyCollection<DomainEvent> GetDomainEvents() => mDomainEvents.ToList();
 
     public void ClearDomainEvents() => mDomainEvents.Clear();
 
-    protected void RaiseDomainEvent(IDomainEvent domainEvent) =>
+    protected void RaiseDomainEvent(DomainEvent domainEvent) =>
         mDomainEvents.Add(domainEvent);
 }

@@ -17,7 +17,7 @@ internal sealed class MemberCreatedEventHandler : INotificationHandler<MemberCre
 
     public async Task Handle(MemberCreatedEvent notification, CancellationToken cancellationToken = default)
     {
-        Member? NewMember = await mMemberRepository.GetByIdAsync(notification.MemberId, cancellationToken);
+        Member? NewMember = await mMemberRepository.GetByIdAsync(notification.Id, cancellationToken);
 
         if (NewMember is null)
             return;
