@@ -1,4 +1,5 @@
 using Api.Controllers;
+using Api.Middleware;
 using Application.Behaviors;
 using Data;
 using Data.Repositories;
@@ -22,6 +23,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //TODO: Move startups to related layers and work up
+builder.Services.AddProblemDetails();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 // Data Services
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
@@ -51,7 +56,11 @@ builder.Services.AddEndpointDefinitions(typeof(MemberController));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
+
+//app.UseMiddleware<ExceptionHandlingMiddlewareSimple>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

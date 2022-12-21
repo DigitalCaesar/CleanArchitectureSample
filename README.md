@@ -420,7 +420,32 @@ public abstract class CreditCard : Enumeration<CreditCard>
 	}
 }
 ```
+### Bonus Error Handling
 
+Strategies
+- Add middleware logic by adding a app.Use(() => {}) to program.cs using a try/catch before moving next
+- Create a simple class for middleware
+- Create a strongly typed middleware implementing IMiddleware
+
+Steps
+1. Create a middleware class
+2. Add the class as a transient service for initialization
+3. UseMiddleware in program.cs
+
+```
+app.Use(async (context, next) => 
+{
+	try
+	{
+		await next(context);
+	}
+	catch(Exception e)
+	{
+		context.Response.StatusCode = 500;
+		// TODO: Add more meaningful information and logging
+	}
+})
+```
 
 ## Credit
 Milan Jovanovic

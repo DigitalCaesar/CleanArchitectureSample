@@ -29,6 +29,7 @@ public sealed class EventController : ApiController, IEndpointDefinition
     }
     public async Task<IResult> GetEventList(IEventRepository repository, CancellationToken cancellationToken = default)
     {
+        throw new Exception("This is a test expection");
         var Items = repository.GetAll(cancellationToken);
         return Results.Ok(Items);
     }
