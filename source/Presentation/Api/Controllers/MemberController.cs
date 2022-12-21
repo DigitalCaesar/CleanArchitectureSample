@@ -40,7 +40,7 @@ public class MemberController : ApiController, IEndpointDefinition
 
     public void DefineServices(IServiceCollection services)
     {
-        services.AddScoped<IMemberRepository, MemberRepository>();
+        //services.AddScoped<IMemberRepository, MemberRepository>();
     }
 
     public async Task<IResult> RegisterMember(ISender sender, string username, string email, string firstName, string lastName, CancellationToken cancellationToken = default)

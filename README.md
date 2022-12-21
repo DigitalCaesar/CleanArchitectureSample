@@ -447,6 +447,55 @@ app.Use(async (context, next) =>
 })
 ```
 
+### Bonus Decorator for Caching
+
+Works between the API and the database
+
+Steps
+1. Add Cache Repository
+2. Add IMemoryCache to Repository
+3. Make key
+4. Wire in program.cs - add the concrete repo, add cache implementing interface
+
+Strategy for initialization
+1. Initialize the concrete DbRepo, reference the DbRepo in the CacheRepo, initiailize the interface referencing the cacheRepo
+   Pros:  Simple to wire up with no other dependencies
+   Cons:  Can be complicated if you are initializing the repo anywhere else - it will break or not function as expected
+2. Initialize the concrete DbRepo, reference the DbRepo in the CacheRepo, completex initialization of the interface
+   Pros:  No dependencies
+   Cons:  More complexity in the program.cs
+3. Use Scrutor Decorator, Cache only references IMemberRepo
+   Pros:  Clean and conflicts if referencing the interface
+   Cons:  Brings in the SCutor dependency
+
+Option 1
+```
+builder.Services.AddScoped<MemberRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberCacheRepository>();
+```
+
+Option 2
+```
+builder.Services.AddScoped<IMemberRepository>(provider => 
+{
+	var memberRepo = provider.GetService<MemberRepository>()!;
+
+	return new MemberCacheRepository(
+		memberRepository,
+		provider.GetService<IMemoryCache>()!);
+	)
+})
+```
+
+Options 3
+```
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.Decorate<IMemberRepository, MemberCacheRepository>();
+```
+
+Notes
+- 
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

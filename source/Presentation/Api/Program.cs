@@ -27,10 +27,14 @@ builder.Services.AddProblemDetails();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddMemoryCache();
 // Data Services
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+//builder.Services.AddScoped<MemberRepository>();
+//builder.Services.AddScoped<IMemberRepository, MemberCacheRepository>();
+builder.Services.Decorate<IMemberRepository, MemberCacheRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 // Feature Services
