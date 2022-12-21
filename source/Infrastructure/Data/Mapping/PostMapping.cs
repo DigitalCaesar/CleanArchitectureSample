@@ -9,7 +9,7 @@ internal static class PostMapping
 {
     public static PostData Map(this Post entity)
     {
-        MemberData Author = (MemberData)entity.Author.Map();
+        //MemberData Author = (MemberData)entity.Author.Map();
         List<TagData> Tags = entity.Tags.Select(x => (TagData)x.Map()).ToList();
 
         PostData NewItem = new PostData()
@@ -17,8 +17,8 @@ internal static class PostMapping
             Id = entity.Id,
             Name = entity.Name.Value,
             Content = entity.Content.Value,
-            //AuthorId = entity.Author.Id, 
-            Author = Author,
+            AuthorId = entity.AuthorId, 
+            //Author = Author,
             Tags = Tags
         };
         return NewItem;
@@ -34,17 +34,16 @@ internal static class PostMapping
 
         if (
             Name is null ||
-            Content is null || 
-            data.Author is null)
+            Content is null)
             throw new Data.Exceptions.InvalidDataException("PostData");
 
-        Member Author = data.Author.Map();
+        //Member Author = data.Author.Map();
 
         Post NewItem = Post.Create(
             data.Id, 
             Name, 
             Content, 
-            Author, 
+            data.AuthorId, 
             Tags);
 
         return NewItem;

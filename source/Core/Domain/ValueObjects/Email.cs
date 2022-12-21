@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Domain.ValueObjects;
 public sealed class Email : ValueObject
 {
-    public const int MaxLength = 50;
+    public const int MaxLength = 254;
 
     public string Value { get; }
 

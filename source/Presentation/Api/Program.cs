@@ -1,6 +1,5 @@
 using Api.Controllers;
 using Application.Behaviors;
-using Application.Members.Commands.Create;
 using Data;
 using Data.Repositories;
 using DigitalCaesar.Server.Api;
@@ -9,17 +8,13 @@ using Domain.Entities.Events;
 using Domain.Entities.Members;
 using Domain.Entities.Posts;
 using Domain.Entities.Roles;
-using Domain.ValueObjects;
+using Domain.Entities.Tags;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Infrastructure.BackgroundJobs;
 using MediatR;
 using Messaging;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.Resource;
-using System.Threading;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 //TODO: Move startups to related layers and work up
 // Data Services
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Feature Services

@@ -1,12 +1,9 @@
 ﻿using Domain.Entities.Posts;
 using Data.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Data.Models;
 using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
+using Domain.ValueObjects;
 
 namespace Data.Repositories;
 public class PostRepository : IPostRepository
@@ -20,7 +17,8 @@ public class PostRepository : IPostRepository
 
     public async Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        PostData? RawData = await mDataContext.Posts.Include(x => x.Author).FirstOrDefaultAsync(x => x.Id == id);
+        //PostData? RawData = await mDataContext.Posts.Include(x => x.Author).FirstOrDefaultAsync(x => x.Id == id);
+        PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
             return default;
 
@@ -36,14 +34,20 @@ public class PostRepository : IPostRepository
 
         PostData NewPost = post.Map();
 
+        //mDataContext.Entry<MemberData>(NewPost.Author).State = EntityState.Detached;
         await mDataContext.Posts.AddAsync(NewPost);
         await mDataContext.SaveChangesAsync();
     }
 
     public async Task<List<Post>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<PostData> RawData = await mDataContext.Posts.Include(x => x.Author).ToListAsync();
+        List<PostData> RawData = await mDataContext.Posts.ToListAsync();
         List<Post> MappedData = RawData.Select(x => (Post)x.Map()).ToList();
         return MappedData;
+    }
+    public async Task<bool> IsNameUniqueAsync(PostName postName, CancellationToken cancellationToken)
+    {
+        PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Name == postName.Value);
+        return (RawData is null);
     }
 }

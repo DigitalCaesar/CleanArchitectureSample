@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Posts;
+﻿using Domain.Entities.Members;
+using Domain.Entities.Posts;
 using Domain.Events;
 using MediatR;
 using Messaging;
@@ -8,11 +9,13 @@ internal sealed class PostCreatedEventHandler : INotificationHandler<PostCreated
 {
     private readonly IEmailService mEmailService;
     private readonly IPostRepository mPostRepository;
+    private readonly IMemberRepository mMemberRepository;
 
-    public PostCreatedEventHandler(IEmailService emailService, IPostRepository postRepository)
+    public PostCreatedEventHandler(IEmailService emailService, IPostRepository postRepository, IMemberRepository memberRepository)
     {
         mEmailService = emailService;
         mPostRepository = postRepository;
+        mMemberRepository = memberRepository;
     }
 
     public async Task Handle(PostCreatedEvent notification, CancellationToken cancellationToken = default)
@@ -20,8 +23,13 @@ internal sealed class PostCreatedEventHandler : INotificationHandler<PostCreated
         Post? Post = await mPostRepository.GetByIdAsync(notification.PostId, cancellationToken);
 
         if (Post is null)
-            return;
+            return;  //TODO: HANDLE ERROR
 
-        await mEmailService.SendEmailNotificationAsync($"A new post '{Post.Name}' was created by '{Post.Author.Username}'.", cancellationToken);
+        Member? Author = await mMemberRepository.GetByIdAsync(Post.AuthorId, cancellationToken);
+
+        if (Author is null)
+            return;  //TODO: HANDLE ERROR
+
+        await mEmailService.SendEmailNotificationAsync($"A new post '{Post.Name}' was created by '{Author.Username}'.", cancellationToken);
     }
 }

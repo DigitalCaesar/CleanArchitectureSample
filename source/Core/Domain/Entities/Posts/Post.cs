@@ -3,12 +3,7 @@ using Domain.Entities.Tags;
 using Domain.Events;
 using Domain.Shared;
 using Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Posts;
 
@@ -30,7 +25,7 @@ public sealed class Post : AggregateRoot
     /// <summary>
     /// The member that created or owns the post
     /// </summary>
-    public Member Author { get; private set; }
+    public Guid AuthorId { get; private set; }
     /// <summary>
     /// A list of categories associated to the post
     /// </summary>
@@ -43,14 +38,14 @@ public sealed class Post : AggregateRoot
     /// <param name="name">the title of the post</param>
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
-    private Post(Guid id, PostName name, PostContent content, Member author, List<Tag> tags) : base(id)
+    private Post(Guid id, PostName name, PostContent content, Guid authorId, List<Tag> tags) : base(id)
     {
         Name = name;
         Content = content;
-        Author = author;
+        AuthorId = authorId;
         mTags = tags;
 
-        RaiseDomainEvent(new PostCreatedEvent(id, author.Id));
+        RaiseDomainEvent(new PostCreatedEvent(id, authorId));
     }
 
     /// <summary>
@@ -60,10 +55,10 @@ public sealed class Post : AggregateRoot
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
     /// <returns>a post</returns>
-    public static Post Create(PostName name, PostContent content, Member author, List<Tag> tags)
+    public static Post Create(PostName name, PostContent content, Guid authorId, List<Tag> tags)
     {
         var id = Guid.NewGuid();
-        return new Post(id, name, content, author, tags);
+        return new Post(id, name, content, authorId, tags);
     }
     /// <summary>
     /// Creates a new post from existing post data
@@ -73,9 +68,9 @@ public sealed class Post : AggregateRoot
     /// <param name="content">the article of the post</param>
     /// <param name="author">the author or owner of the post</param>
     /// <returns>a post</returns>
-    public static Post Create(Guid id, PostName name, PostContent content, Member author, List<Tag> tags)
+    public static Post Create(Guid id, PostName name, PostContent content, Guid authorId, List<Tag> tags)
     {
-        return new Post(id, name, content, author, tags);
+        return new Post(id, name, content, authorId, tags);
     }
 
     /// <summary>

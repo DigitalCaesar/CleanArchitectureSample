@@ -47,12 +47,13 @@ public sealed class PostController : ApiController, IEndpointDefinition
     {
         services.AddScoped<IPostRepository, PostRepository>();
     }
-    public async Task<IResult> CreatePost(ISender sender, string name, string content, CancellationToken cancellationToken = default)
+    //public async Task<IResult> CreatePost(ISender sender, string name, string content, CancellationToken cancellationToken = default)
+    public async Task<IResult> CreatePost(ISender sender, [FromBody]CreatePostCommand command, CancellationToken cancellationToken = default)
     {
         // TODO: Need to add authentication to pickup on author (logged in member) to set the author property
-        Member author = Member.Create(UserName.Create("TestAuthor").Value, Email.Create("testauthor@someplace.com").Value, FirstName.Create("Test").Value, LastName.Create("Author").Value, new List<Role> { Role.Create(Name.Create("Author").Value, Description.Create("Author Role").Value) });
-        List<Tag> tags = new List<Tag>();
-        var command = new CreatePostCommand(name, content, author, tags);
+        //Member author = Member.Create(UserName.Create("TestAuthor").Value, Email.Create("testauthor@someplace.com").Value, FirstName.Create("Test").Value, LastName.Create("Author").Value, new List<Role> { Role.Create(Name.Create("Author").Value, Description.Create("Author Role").Value) });
+        //List<string> tags = new List<string>();
+        //var command = new CreatePostCommand(name, content, author, tags);
 
         Result<Guid> result = await sender.Send(command, cancellationToken);
 
@@ -65,6 +66,7 @@ public sealed class PostController : ApiController, IEndpointDefinition
     }
     public async Task<IResult> GetPostList(IPostRepository repository, CancellationToken cancellationToken = default)
     {
+        //TODO: CONVERT TO CQRS
         var Items = repository.GetAll(cancellationToken);
         return Results.Ok(Items);
     }

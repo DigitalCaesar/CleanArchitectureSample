@@ -10,8 +10,8 @@ public class PostData
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
-    //public Guid AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     //[ForeignKey(nameof(AuthorId))]
-    public virtual MemberData Author { get; set; }
+    //public virtual MemberData Author { get; set; }
     public virtual ICollection<TagData> Tags { get; set; } = new List<TagData>();
 }

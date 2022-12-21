@@ -8,5 +8,4 @@ public sealed record CreateMemberCommand(
     string Username, 
     string Email,
     string FirstName,
-    string LastName,
-    List<Role> Roles) : ICommand<Guid>; 
+    string LastName) : ICommand<Guid>; 

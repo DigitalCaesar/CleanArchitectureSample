@@ -49,8 +49,7 @@ public class MemberController : ApiController, IEndpointDefinition
             username,
             email,
             firstName,
-            lastName,
-            new List<Role>() { Role.Create(Name.Create("Admin").Value, Description.Create("Administrative Users").Value) });
+            lastName);
 
         Result<Guid> result = await sender.Send(command, cancellationToken);
 

@@ -282,6 +282,10 @@ Strategies
 - throw an exception and handle in exception handling middleware
 - use MediatR pipeline* to return results
 
+### Bonus Adding missing repositories and validations
+
+Notes
+- ValueObjects are too much.  To create, you get a result, you must check if the result was successful, then you must check if the value is null to satisfy the compiler.  Why not just return the value and check for null as success?
 
 ## Credit
 Milan Jovanovic
