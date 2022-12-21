@@ -28,7 +28,6 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Feature Services
 builder.Services.AddScoped<IEmailService, EmailService>();
 // MediatR

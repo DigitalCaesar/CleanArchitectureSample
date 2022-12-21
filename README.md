@@ -324,7 +324,103 @@ Notes:
 
 Steps
 1. Make Application library internal visible to test
-2. 
+2. Create UnitTest project in test folder
+3. reference Moq to Mock the repos
+4. Use Mock.Setup() to set parameters and return type of mocked methods/properties
+5. Write test against handlers using mocked repos
+
+Notes
+- naming convention class named for class tested
+- method named for method tested, Should, expected outcome, and condition
+
+### Unit Of Work
+
+Using the unit of work pattern also abstracting entity framework (or your data layer) from the application/presentation to avoid shared dependencies.  It also for easier mocking during unit testing.  It also offloads the save responsibility from the repositories allowing you to more easily create transactions across multiple repos.  This method avoids using and wiring interceptors.  It also allows you to build in record log and management.
+Similarly, abstracting the repos allows you to more easily mock in testing and shield the application layer from the data.
+
+
+Steps
+1. start with base UnitOfWork
+2. Move Interceptor methods into UoW.
+
+Notes
+- starts with a very basic unit of work
+- moves interceptors into unit of work
+- References an Audit lesson that is not in the playlist - Audit interceptor for adding create and modify date tracking.
+
+### Smart Enum (strongly typed enum)
+
+Basic enumerations work well, but sometimes you need more functionality.  Building a SmartEnum allows you to mimic the functionality of enum and extend it to include additional functionality in a strongly typed class.
+
+Steps
+1. Create an Enumeration class to inherit from 
+2. Switch ENUM concrete type to class inheriting from Enumeration
+3. 
+
+
+Notes
+- did not relate to the solution
+
+SmartEnum Base
+```
+public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
+{
+	public int Value { get; protected init; }
+	public string Name { get; protected init; } = string.Empty;
+
+	public bool Equals(Enumeration<TEnum>? other)
+	{
+		if(other is null)
+			return false;
+
+			return GetType() == other.GetType() &&
+				Value == other.Value;
+	}
+
+	public override bool Equalt
+}
+```
+
+SmartEnum implementation
+```
+public abstract class CreditCard : Enumeration<CreditCard>
+{
+	public static readonly CreditCard Standard = new StandardCreditCard();
+	public static readonly CreditCard Premium = new PremiumCrediCard();
+	public static readonly CreditCard Platinum = new PlatinumCreditCard();
+
+	private CreditCard(int value, string name)
+		: base(value, name)
+	{ }
+
+	public abstract double Discount { get; }
+
+	private sealed class StandardCreditCard : CreditCard
+	{
+		public StandardCreditCard()
+			: base(1, "Standard") { }
+
+		public override double Discount => 0.0;
+	}
+	
+	private sealed class PremiumCreditCard : CreditCard
+	{
+		public StandardCreditCard()
+			: base(1, "Premium") { }
+
+		public override double Discount => 0.05;
+	}
+	
+	private sealed class PlatinumCreditCard : CreditCard
+	{
+		public StandardCreditCard()
+			: base(1, "Standard") { }
+
+		public override double Discount => 0.1;
+	}
+}
+```
+
 
 ## Credit
 Milan Jovanovic

@@ -1,4 +1,5 @@
 ﻿using Data.Interceptors;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,12 +10,13 @@ public static class ApplicationDataStartup
 {
     public static void SetupData(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        //services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
-            var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
-            options.UseInMemoryDatabase("CleanArchitectureDb")
-                .AddInterceptors(interceptor);
+            //var interceptor = sp.GetService<ConvertDomainEventsToOutboxMessagesInterceptor>();
+            options.UseInMemoryDatabase("CleanArchitectureDb");
+                //.AddInterceptors(interceptor);
         });
     }
 
