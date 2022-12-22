@@ -1,5 +1,6 @@
 using Api.Controllers;
 using Api.Middleware;
+using Api.Options;
 using Application.Behaviors;
 using Data;
 using Data.Repositories;
@@ -11,6 +12,7 @@ using Domain.Entities.Posts;
 using Domain.Entities.Roles;
 using Domain.Entities.Tags;
 using FluentValidation;
+using Infrastructure.Authentication;
 using Infrastructure.BackgroundJobs;
 using Infrastructure.Idempotent;
 using MediatR;
@@ -23,10 +25,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //TODO: Move startups to related layers and work up
+// Logging
 builder.Services.AddProblemDetails();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+// Exception handling
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+// Caching
 builder.Services.AddMemoryCache();
 // Data Services
 builder.Services.AddScoped<IPostRepository, PostRepository>();
@@ -51,8 +56,12 @@ builder.Services.SetupData(builder.Configuration);
 // Scheduler
 builder.Services.SetupQuartz();
 // Security
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+    .AddJwtBearer();
+//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddAuthorization();
 // EndPoint Registration
 builder.Services.AddEndpointDefinitions(typeof(MemberController));
@@ -74,7 +83,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseEndpointDefinitions();
 app.UseHttpsRedirection();
-
+// Use Security
 app.UseAuthentication();
 app.UseAuthorization();
 

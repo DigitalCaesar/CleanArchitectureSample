@@ -28,22 +28,22 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
         // Check values
         var userName = UserName.Create(request.Username);
         if (!userName.Successful || userName.Value is null)
-            return Result<Guid>.Failure(new Error("UserName", $"The requested username '{request.Username}' is invalid."));
+            return Result.Failure<Guid>(new Error("UserName", $"The requested username '{request.Username}' is invalid."));
         var email = Email.Create(request.Email);
         if (!email.Successful || email.Value is null)
-            return Result<Guid>.Failure(new Error("Email", $"The requested Email '{request.Email}' is invalid."));
+            return Result.Failure<Guid>(new Error("Email", $"The requested Email '{request.Email}' is invalid."));
         var firstName = FirstName.Create(request.FirstName);
         if (!firstName.Successful || firstName.Value is null)
-            return Result<Guid>.Failure(new Error("FirstName", $"The requested FirstName '{request.FirstName}' is invalid."));
+            return Result.Failure<Guid>(new Error("FirstName", $"The requested FirstName '{request.FirstName}' is invalid."));
         var lastName = LastName.Create(request.LastName);
         if (!lastName.Successful || lastName.Value is null)
-            return Result<Guid>.Failure(new Error("LastName", $"The requested FirstName '{request.LastName}' is invalid."));
+            return Result.Failure<Guid>(new Error("LastName", $"The requested FirstName '{request.LastName}' is invalid."));
 
         // Check uniqueness
         if(!await mMemberRepository.IsEmailUniqueAsync(email.Value, cancellationToken))
-            return Result<Guid>.Failure(DomainErrors.Member.DuplicateEmail(email.Value.ToString()));
+            return Result.Failure<Guid>(DomainErrors.Member.DuplicateEmail(email.Value.ToString()));
         if (!await mMemberRepository.IsUsernameUniqueAsync(userName.Value, cancellationToken))
-            return Result<Guid>.Failure(DomainErrors.Member.DuplicateUsername(userName.Value.ToString()));
+            return Result.Failure<Guid>(DomainErrors.Member.DuplicateUsername(userName.Value.ToString()));
 
         // Set Default Role
         Role? DefaultRole = await mRoleRepository.GetByName("User", cancellationToken);

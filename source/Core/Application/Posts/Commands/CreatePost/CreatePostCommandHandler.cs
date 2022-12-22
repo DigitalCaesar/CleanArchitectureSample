@@ -30,14 +30,14 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
         // Check values
         var postName = PostName.Create(request.Name);
         if (!postName.Successful || postName.Value is null)
-            return Result<Guid>.Failure(new Error("PostName", $"The requested name '{request.Name}' is invalid."));
+            return Result.Failure<Guid>(new Error("PostName", $"The requested name '{request.Name}' is invalid."));
         var postContent = PostContent.Create(request.Content);
         if (!postContent.Successful || postContent.Value is null)
-            return Result<Guid>.Failure(new Error("PostContent", $"The requested post content '{request.Content}' is invalid."));
+            return Result.Failure<Guid>(new Error("PostContent", $"The requested post content '{request.Content}' is invalid."));
 
         // Check uniqueness
         if (!await mPostRepository.IsNameUniqueAsync(postName.Value, cancellationToken))
-            return Result<Guid>.Failure(new Error("Name", "The Name must be unique"));
+            return Result.Failure<Guid>(new Error("Name", "The Name must be unique"));
 
         // Set Tags
         List<Tag> Tags = new();
@@ -60,7 +60,7 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
         Guid AuthorId = Guid.Parse(request.AuthorId);
         Member? Author = await mMemberRepository.GetByIdAsync(AuthorId, cancellationToken);
         if (Author is null)
-            return Result<Guid>.Failure(new Error("PostAuthor", "A Post must have a valid, existing author."));
+            return Result.Failure<Guid>(new Error("PostAuthor", "A Post must have a valid, existing author."));
 
         // Create the new item
         var NewItem = Post.Create(

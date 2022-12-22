@@ -515,7 +515,17 @@ Notes
 
 
 Steps
-
+1. Add Jwt nuget
+2. Add IJwtProvider to abstract the provider implementation
+3. Add a LoginCommand
+4. Add a LoginRequest
+5. Add a LoginCommandHandler
+6. Add a login endpoint to the member controller
+7. Wire authentication/authorization to program.cs
+8. create JwtOptions and wire
+9. Create JwtBearerOptions and wire
+10. Add options to config
+++. Add to Swagger
 
 ## Credit
 Milan Jovanovic

@@ -1,4 +1,5 @@
-﻿using Application.Members.Commands.Create;
+﻿using Application.Login;
+using Application.Members.Commands.Create;
 using Application.Members.Queries;
 using Application.Members.Queries.GetMemberById;
 using Data.Repositories;
@@ -21,14 +22,19 @@ public class MemberController : ApiController, IEndpointDefinition
             throw new ArgumentException("The app needs to be of type WebApplication");
 
         WebApplication webApp = (WebApplication)app;
-        webApp.MapPost("/api/members", RegisterMember)
+        webApp.MapPost("/api/members/register", RegisterMember)
             .WithName("RegisterMember")
+            .AllowAnonymous()
+            .Produces(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
+        webApp.MapPost("/api/members/login", LoginMember)
+            .WithName("LoginMember")
             .AllowAnonymous()
             .Produces(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members/{id}", GetMemberById)
             .WithName("GetMemberById")
-            .AllowAnonymous()
+            .RequireAuthorization()
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members", GetMemberList)
@@ -59,6 +65,17 @@ public class MemberController : ApiController, IEndpointDefinition
         return Results.Created(
             $"/api/members/{result.Value}",
             result.Value);
+    }
+    public async Task<IResult> LoginMember(ISender sender, [FromBody] LoginRequest request, CancellationToken cancellationToken)
+    {
+        var command = new LoginCommand(request.Email);
+
+        Result<string> tokenResult = await sender.Send(command, cancellationToken);
+
+        if(!tokenResult.Successful)
+            return HandleFailure(tokenResult);
+
+        return Results.Ok(tokenResult.Value);
     }
     public async Task<IResult> GetMemberList(IMemberRepository repository, CancellationToken cancellationToken = default)
     {

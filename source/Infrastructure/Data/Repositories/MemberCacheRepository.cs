@@ -26,6 +26,7 @@ public class MemberCacheRepository : IMemberRepository
         return mMemberRepository.GetAll(cancellationToken);
     }
 
+
     public Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         string key = $"member-{id}";
@@ -38,6 +39,15 @@ public class MemberCacheRepository : IMemberRepository
 
                 return mMemberRepository.GetByIdAsync(id, cancellationToken);
             });
+    }
+    public Task<Member?> GetByEmailAsync(Email email, CancellationToken cancellationToken)
+    {
+        return mMemberRepository.GetByEmailAsync(email, cancellationToken);
+    }
+
+    public Task<Member?> GetByUsernameAsync(UserName username, CancellationToken cancellationToken)
+    {
+        return mMemberRepository.GetByUsernameAsync(username, cancellationToken);
     }
 
     public Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken)

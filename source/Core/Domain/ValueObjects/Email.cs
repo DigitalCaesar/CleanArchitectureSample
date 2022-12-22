@@ -15,19 +15,16 @@ public sealed class Email : ValueObject
 
     public static Result<Email> Create(string value)
     {
-        const string ShortName = nameof(Email);
-        const string LongName = "email";
-
         return Result.Create(value)
             .Ensure(
                 e => !string.IsNullOrWhiteSpace(e),
-                DomainErrors.Email.Empty(ShortName, LongName))
+                DomainErrors.Email.Empty)
             .Ensure(
                 e => e.Length <= MaxLength,
-                DomainErrors.Email.TooLong(ShortName, LongName, MaxLength))
+                DomainErrors.Email.TooLong(MaxLength))
             .Ensure(
                 e => e.Split('@').Length == 2,
-                DomainErrors.Email.InvalidFormat(ShortName, LongName))
+                DomainErrors.Email.InvalidFormat)
             .Map(e => new Email(e));
     }
 

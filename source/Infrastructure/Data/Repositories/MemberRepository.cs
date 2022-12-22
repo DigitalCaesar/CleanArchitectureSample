@@ -16,15 +16,6 @@ public class MemberRepository : IMemberRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Id == id);
-        if (RawData is null)
-            return default;
-
-        Member ExistingPost = RawData.Map();
-        return ExistingPost;
-    }
 
     public async Task CreateAsync(Member member, CancellationToken cancellationToken = default)
     {
@@ -32,10 +23,43 @@ public class MemberRepository : IMemberRepository
         if (ExistingItem is not null)
             throw new DuplicateDataException("Member Id", member.Id.ToString());
 
-        MemberData NewMember = member.Map();
+        MemberData MappedItem = member.Map();
 
-        await mDataContext.Members.AddAsync(NewMember);
+        await mDataContext.Members.AddAsync(MappedItem);
         await mDataContext.SaveChangesAsync();
+    }
+    public async Task<List<Member>> GetAll(CancellationToken cancellationToken = default)
+    {
+        List<MemberData> RawData = await mDataContext.Members.ToListAsync();
+        List<Member> MappedData = RawData.Select(x => (Member)x.Map()).ToList();
+        return MappedData;
+    }
+    public async Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Id == id);
+        if (RawData is null)
+            return default;
+
+        Member MappedItem = RawData.Map();
+        return MappedItem;
+    }
+    public async Task<Member?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default)
+    {
+        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Email == email.Value);
+        if (RawData is null)
+            return default;
+
+        Member MappedItem = RawData.Map();
+        return MappedItem;
+    }
+    public async Task<Member?> GetByUsernameAsync(UserName username, CancellationToken cancellationToken = default)
+    {
+        MemberData? RawData = await mDataContext.Members.FirstOrDefaultAsync(x => x.Username == username.Value);
+        if (RawData is null)
+            return default;
+
+        Member MappedItem = RawData.Map();
+        return MappedItem;
     }
 
     public async Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default)
@@ -49,10 +73,4 @@ public class MemberRepository : IMemberRepository
         return (RawData is null);
     }
 
-    public async Task<List<Member>> GetAll(CancellationToken cancellationToken = default)
-    {
-        List<MemberData> RawData = await mDataContext.Members.ToListAsync();
-        List<Member> MappedData = RawData.Select(x => (Member)x.Map()).ToList();
-        return MappedData;
-    }
 }
