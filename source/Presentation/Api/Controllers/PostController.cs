@@ -1,24 +1,16 @@
-﻿using Application.Members.Commands.Create;
-using Application.Members.Queries.GetMemberById;
-using Application.Members.Queries;
-using Application.Posts.Commands.CreatePost;
-using Data.Repositories;
-using DigitalCaesar.Server.Api;
-using Domain.Entities.Members;
-using Domain.Entities.Posts;
-using Domain.Entities.Roles;
-using Domain.Entities.Tags;
-using Domain.Shared;
-using Domain.ValueObjects;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System.Data;
+﻿using Application.Posts.Commands.CreatePost;
 using Application.Posts.Queries;
 using Application.Posts.Queries.GetPostById;
+using Data.Repositories;
+using DigitalCaesar.Server.Api;
+using Domain.Entities.Posts;
+using Domain.Shared;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public sealed class PostController : ApiController, IEndpointDefinition
+public sealed class PostController : ApiControllerBase, IEndpointDefinition
 {
     public void DefineEndpoints(IApplicationBuilder app)
     {

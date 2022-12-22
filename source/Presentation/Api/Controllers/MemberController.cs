@@ -2,18 +2,16 @@
 using Application.Members.Commands.Create;
 using Application.Members.Queries;
 using Application.Members.Queries.GetMemberById;
-using Data.Repositories;
 using DigitalCaesar.Server.Api;
 using Domain.Entities.Members;
-using Domain.Entities.Roles;
 using Domain.Shared;
-using Domain.ValueObjects;
+using Infrastructure.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-public class MemberController : ApiController, IEndpointDefinition
+public class MemberController : ApiControllerBase, IEndpointDefinition
 {
     
     public void DefineEndpoints(IApplicationBuilder app)
@@ -34,12 +32,12 @@ public class MemberController : ApiController, IEndpointDefinition
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members/{id}", GetMemberById)
             .WithName("GetMemberById")
-            .RequireAuthorization()
+            .RequireAuthorization(Permission.ReadMember.ToString())
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members", GetMemberList)
             .WithName("GetMemberList")
-            .AllowAnonymous()
+            .RequireAuthorization(Permission.ReadMember.ToString())
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
     }

@@ -1,19 +1,9 @@
 ﻿using Domain.Shared;
-using FluentValidation.Internal;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
-public abstract class ApiController //: ControllerBase
+public abstract class ApiControllerBase
 {
-    //protected readonly ISender Sender;
-
-    //protected ApiController(ISender sender)
-    //{
-    //    Sender = sender;
-    //}
     protected IResult HandleFailure(Result result)
     {
         return result switch
