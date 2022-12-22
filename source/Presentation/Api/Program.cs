@@ -1,16 +1,10 @@
 using Api.Controllers;
 using Api.Middleware;
 using Api.Options;
+using Api.Startup;
 using Application.Behaviors;
-using Data;
-using Data.Repositories;
+using Data.Startup;
 using DigitalCaesar.Server.Api;
-using Domain;
-using Domain.Entities.Events;
-using Domain.Entities.Members;
-using Domain.Entities.Posts;
-using Domain.Entities.Roles;
-using Domain.Entities.Tags;
 using FluentValidation;
 using Infrastructure.Authentication;
 using Infrastructure.BackgroundJobs;
@@ -18,7 +12,6 @@ using Infrastructure.Idempotent;
 using MediatR;
 using Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,24 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 //TODO: Move startups to related layers and work up
 // Logging
 builder.Services.AddProblemDetails();
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+builder.Logging.AddApplicationLogging();
 // Exception handling
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 // Caching
 builder.Services.AddMemoryCache();
-// Data Services
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<ITagRepository, TagRepository>();
-builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-//builder.Services.AddScoped<MemberRepository>();
-//builder.Services.AddScoped<IMemberRepository, MemberCacheRepository>();
-builder.Services.Decorate<IMemberRepository, MemberCacheRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IEventRepository, EventRepository>();
 // Feature Services
 builder.Services.AddScoped<IEmailService, EmailService>();
 // MediatR
+//builder.Services.AddMediator();
 builder.Services.AddMediatR(Application.AssemblyReference.Assembly);
 builder.Services.AddMediatR(Api.AssemblyReference.Assembly);
 builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
@@ -52,7 +36,7 @@ builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomai
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 // Database
-builder.Services.SetupData(builder.Configuration);
+builder.Services.AddDataAccessEntityFramework(DataAccessStrategy.UnitOfWork, CachingInitializationStrategy.Concrete);
 // Scheduler
 builder.Services.SetupQuartz();
 // Security
@@ -87,7 +71,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"] ?? "";
+//var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"] ?? "";
 
 
 

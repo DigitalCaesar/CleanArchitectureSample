@@ -7,10 +7,10 @@ public class MemberCacheRepository : IMemberRepository
 {
     private const int cExpiration = 2;
 
-    private readonly IMemberRepository mMemberRepository;
+    private readonly MemberRepository mMemberRepository;
     private readonly IMemoryCache mMemoryCache;
 
-    public MemberCacheRepository(IMemoryCache memoryCache, IMemberRepository memberRepository)
+    public MemberCacheRepository(IMemoryCache memoryCache, MemberRepository memberRepository)
     {
         mMemoryCache = memoryCache;
         mMemberRepository = memberRepository;
