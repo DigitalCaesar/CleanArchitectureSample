@@ -496,6 +496,27 @@ builder.Services.Decorate<IMemberRepository, MemberCacheRepository>();
 Notes
 - 
 
+### Railway - Functional programming
+
+Railway acts as a switch with two possibilities - failure or success. Extensions are used against the Result type to apply validations.  It can result in less code that reads more naturally.
+It is implemented by chaining methods together to result in a Result type that can be returned.  
+This approach abstracts the common patter of validation checks that look for conditions to decide if a result will be successful or failure.
+Alternatively, it can be hard to debug and is not a common concept that could confuse others who are not familiar with the pattern.
+
+Steps
+1. Create an extension class for Result
+2. Update conditions in classes that produce Result
+
+Notes
+- implemented on Email value object as a test
+
+### Token Authentication
+
+
+
+Steps
+
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

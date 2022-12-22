@@ -29,13 +29,13 @@ public class Result<T> : Result
     //public static Result<T> Create(T value)
     //{
     //    return new(true, Error.None, value);
+    ////}
+    //public static Result<T> Success(T value)
+    //{
+    //    return new(true, Error.None, value);
     //}
-    public static Result<T> Success(T value)
-    {
-        return new(true, Error.None, value);
-    }
-    public static new Result<T> Failure(Error error)
-    {
-        return new(false, error);
-    }
+    //public static new Result<T> Failure(Error error)
+    //{
+    //    return new(false, error);
+    //}
 }

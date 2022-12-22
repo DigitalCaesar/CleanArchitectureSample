@@ -1,9 +1,5 @@
-﻿using Domain.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Errors;
+using Domain.Shared;
 
 namespace Domain.ValueObjects;
 public sealed class Email : ValueObject
@@ -22,13 +18,17 @@ public sealed class Email : ValueObject
         const string ShortName = nameof(Email);
         const string LongName = "email";
 
-        if (string.IsNullOrEmpty(value))
-            return Result.Failure<Email>(new Error($"{ShortName}.Empty", $"The {LongName} must have a value."));
-        if (value.Length > MaxLength)
-            return Result.Failure<Email>(new Error($"{ShortName}.TooLong", $"The {LongName} must be less that {MaxLength} characters in length."));
-        //TODO:  Add email pattern
-
-        return new Email(value);
+        return Result.Create(value)
+            .Ensure(
+                e => !string.IsNullOrWhiteSpace(e),
+                DomainErrors.Email.Empty(ShortName, LongName))
+            .Ensure(
+                e => e.Length <= MaxLength,
+                DomainErrors.Email.TooLong(ShortName, LongName, MaxLength))
+            .Ensure(
+                e => e.Split('@').Length == 2,
+                DomainErrors.Email.InvalidFormat(ShortName, LongName))
+            .Map(e => new Email(e));
     }
 
     public override IEnumerable<object> GetAtomicValues()
