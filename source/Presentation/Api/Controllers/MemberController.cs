@@ -37,7 +37,8 @@ public class MemberController : ApiControllerBase, IEndpointDefinition
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members", GetMemberList)
             .WithName("GetMemberList")
-            .RequireAuthorization(Permission.ReadMember.ToString())
+            //.RequireAuthorization(Permission.ReadMember.ToString())
+            .AllowAnonymous()
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
     }

@@ -32,7 +32,7 @@ public sealed class Member : AggregateRoot
     /// <summary>
     /// The full name of the member
     /// </summary>
-    public string FullName { get { return string.Concat(FirstName, LastName); } }
+    public string FullName { get { return string.Concat(FirstName.Value, " ", LastName.Value); } }
     /// <summary>
     /// A list of Roles assigned to the member
     /// </summary>

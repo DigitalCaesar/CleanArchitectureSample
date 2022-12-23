@@ -512,20 +512,68 @@ Notes
 
 ### Token Authentication
 
-
+Handles authentication by checking for a registered member and returns a token to use to authenticate further requests limiting access to some end points expecting the authorized token.
 
 Steps
-1. Add Jwt nuget
-2. Add IJwtProvider to abstract the provider implementation
-3. Add a LoginCommand
-4. Add a LoginRequest
-5. Add a LoginCommandHandler
-6. Add a login endpoint to the member controller
+1. Add Microsoft.AspNetCore.Authentication.JwtBearer nuget to the API project
+2. Add IJwtProvider to Infrastructure to abstract the provider implementation
+3. Add a LoginCommand to the Application project
+4. Add a LoginRequest to capture the parameters in the Application project
+5. Add a LoginCommandHandler to the Application project
+6. Add a login endpoint to the member controller of the API project
 7. Wire authentication/authorization to program.cs
 8. create JwtOptions and wire
 9. Create JwtBearerOptions and wire
-10. Add options to config
+10. Add options to AppSettings
 ++. Add to Swagger
+
+Notes
+- Milan put IJwtProvider in Application and then reference from Infrastructure.  The flow should be Infrastructure reference FROM Application not the other way around.  I've plaed in Infrastructure with the idea being the implementation could be moved to a separate Infrastructure layer project.'
+
+### Permission / Authorization (1) Basic Start
+
+Use Authorize to limit access to end points to only those members that match the authorization criteria
+
+Strategy
+- Hard code list of Roles in attribute of endpoint for authorization
+- Hard code policy in attribute of endpoint for authorization
+- Create an authorization type to handle permissions
+
+Steps
+1. Create a HasPermissionAttribute attribute extending AuthorizeAttribute
+2. Create Permission class or enum
+3. Add attribute or .RequireAuthorization to end points that require authorization
+
+Notes
+- Approaches are using attribute - not necessary if using .RequireAuthorization(Permission.Read)
+- Consider handling by value level with Admin = 1 at the top
+- Should extend to post controller
+
+### Permission / Authorization (2) Configure Roles and Permissions
+
+Configure Roles and Permissions with EntityFramework by defining them in the domain. Designed with a hierarchy where a Member belongs to a Role which is assigned a set of Permissions.
+
+Steps
+1. Add Role to entities
+2. Add Permission to entities
+3. Create navigation properties in Role
+
+Note
+- Makes use of SmartEnum, this creates a conflict with the Role type created previously
+- This assumes you've completed the EntityFramework videos which were not part of the playlist. 
+
+## Bonus: EF Core Performance
+
+Using EF with related entities
+
+Steps
+1. Create Entities
+2. Add Navigation Properties
+3. Create DbContext
+4. Configure DbContext
+
+Note
+- Not part of the playlist or solution
 
 ## Credit
 Milan Jovanovic

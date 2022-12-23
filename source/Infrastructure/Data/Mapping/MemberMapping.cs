@@ -9,7 +9,7 @@ internal static class MemberMapping
 {
     public static MemberData Map(this Member entity)
     {
-        List<RoleData> Roles = entity.Roles.Select(x => (RoleData)x.Map()).ToList();
+        List<RoleData> Roles = entity.Roles.Select(x => x.Map()).ToList();
 
         MemberData NewItem = new MemberData()
         {
@@ -28,7 +28,7 @@ internal static class MemberMapping
         Email? Email = Email.Create(data.Email).Value;
         FirstName? FirstName = FirstName.Create(data.FirstName).Value;
         LastName? LastName = LastName.Create(data.LastName).Value;
-        List<Role> Roles = data.Roles.Select(x => (Role)x.Map()).ToList();
+        List<Role> Roles = data.Roles.Select(x => x.Map()).ToList();
 
         if (
             UserName is null ||

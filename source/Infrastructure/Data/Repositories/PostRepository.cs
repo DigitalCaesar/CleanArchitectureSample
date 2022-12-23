@@ -34,14 +34,13 @@ public class PostRepository : IPostRepository
 
         PostData NewPost = post.Map();
 
-        //mDataContext.Entry<MemberData>(NewPost.Author).State = EntityState.Detached;
         await mDataContext.Posts.AddAsync(NewPost);
         await mDataContext.SaveChangesAsync();
     }
 
     public async Task<List<Post>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<PostData> RawData = await mDataContext.Posts.ToListAsync();
+        List<PostData> RawData = await mDataContext.Posts.Include(x => x.Tags).ToListAsync();
         List<Post> MappedData = RawData.Select(x => (Post)x.Map()).ToList();
         return MappedData;
     }

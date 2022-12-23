@@ -3,6 +3,7 @@ using Api.Middleware;
 using Api.Options;
 using Api.Startup;
 using Application.Behaviors;
+using Data;
 using Data.Startup;
 using DigitalCaesar.Server.Api;
 using FluentValidation;
@@ -70,7 +71,6 @@ app.UseHttpsRedirection();
 // Use Security
 app.UseAuthentication();
 app.UseAuthorization();
-
 //var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"] ?? "";
 
 

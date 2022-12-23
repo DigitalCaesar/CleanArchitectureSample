@@ -1,10 +1,7 @@
-﻿using Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities.Members;
+using Domain.Entities.Permissions;
+using Domain.Shared;
+using Domain.ValueObjects;
 
 namespace Domain.Entities.Roles;
 public sealed class Role : Entity
@@ -53,4 +50,16 @@ public sealed class Role : Entity
     {
         return new Role(id, name, description);
     }
+}
+public sealed class RoleEnum : Enumeration<RoleEnum>
+{
+    public static readonly RoleEnum Registered = new(1, "Registered");
+
+    public ICollection<Permission> Permissions { get; set; }
+    public ICollection<Member> Members { get; set; }
+
+    public RoleEnum(int id, string name)
+        : base(id, name) { }
+
+
 }

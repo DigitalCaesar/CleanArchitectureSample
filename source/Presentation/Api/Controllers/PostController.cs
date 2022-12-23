@@ -37,7 +37,7 @@ public sealed class PostController : ApiControllerBase, IEndpointDefinition
 
     public void DefineServices(IServiceCollection services)
     {
-        services.AddScoped<IPostRepository, PostRepository>();
+        //services.AddScoped<IPostRepository, PostRepository>();
     }
     //public async Task<IResult> CreatePost(ISender sender, string name, string content, CancellationToken cancellationToken = default)
     public async Task<IResult> CreatePost(ISender sender, [FromBody]CreatePostCommand command, CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ public sealed class PostController : ApiControllerBase, IEndpointDefinition
     public async Task<IResult> GetPostList(IPostRepository repository, CancellationToken cancellationToken = default)
     {
         //TODO: CONVERT TO CQRS
-        var Items = repository.GetAll(cancellationToken);
+        var Items = await repository.GetAll(cancellationToken);
         return Results.Ok(Items);
     }
     public async Task<IResult> GetPostById(ISender sender, Guid id, CancellationToken cancellationToken = default)

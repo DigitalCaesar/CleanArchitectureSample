@@ -30,7 +30,7 @@ public class MemberRepository : IMemberRepository
     }
     public async Task<List<Member>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<MemberData> RawData = await mDataContext.Members.ToListAsync();
+        List<MemberData> RawData = await mDataContext.Members.Include(x => x.Roles).ToListAsync();
         List<Member> MappedData = RawData.Select(x => (Member)x.Map()).ToList();
         return MappedData;
     }

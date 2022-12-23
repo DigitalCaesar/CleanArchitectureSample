@@ -13,5 +13,5 @@ public class PostData
     public Guid AuthorId { get; set; }
     //[ForeignKey(nameof(AuthorId))]
     //public virtual MemberData Author { get; set; }
-    public virtual ICollection<TagData> Tags { get; set; } = new List<TagData>();
+    public ICollection<TagData> Tags { get; set; } = new List<TagData>();
 }

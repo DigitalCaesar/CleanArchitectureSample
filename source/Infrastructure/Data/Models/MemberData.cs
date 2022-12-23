@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Domain.Entities.Members;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Models;
 
@@ -17,7 +13,9 @@ public class MemberData
     public string Email { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public virtual ICollection<RoleData> Roles { get; set; } = new List<RoleData>();
+    public virtual List<RoleData> Roles { get; set; } = new List<RoleData>();
 
     public MemberData() { }
 }
+
+

@@ -11,6 +11,11 @@ internal static class PostMapping
     {
         //MemberData Author = (MemberData)entity.Author.Map();
         List<TagData> Tags = entity.Tags.Select(x => (TagData)x.Map()).ToList();
+        //List<Tag> Tags = entity.Tags.Select(x => new PostTag() 
+        //{ 
+        //    PostId = entity.Id, 
+        //    TagId = x.Id 
+        //}).ToList();
 
         PostData NewItem = new PostData()
         {
@@ -30,7 +35,12 @@ internal static class PostMapping
 
         PostName? Name = PostName.Create(data.Name).Value;
         PostContent? Content = PostContent.Create(data.Content).Value;
-        List<Tag> Tags = data.Tags.Select(x => (Tag)x.Map()).ToList();
+        List<Tag> Tags = data.Tags.Select(x => x.Map()).ToList();
+        //List<Tag> Tags = data.Tags.Select(x => Tag.Create(
+        //    x.TagId, 
+        //    Domain.ValueObjects.Name.Create(x.Tag.Name).Value, 
+        //    Description.Create(x.Tag.Description).Value
+        //    )).ToList();
 
         if (
             Name is null ||
