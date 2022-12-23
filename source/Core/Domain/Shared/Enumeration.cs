@@ -19,7 +19,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
     /// <summary>
     /// The value of the integral type
     /// </summary>
-    public int Value { get; protected init; }
+    public int Id { get; protected init; }
     /// <summary>
     /// The name of the integral type
     /// </summary>
@@ -32,7 +32,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
     /// <param name="name">name of the integral type</param>
     protected Enumeration(int value, string name)
     {
-        Value = value;
+        Id = value;
         Name = name;
     }
 
@@ -66,7 +66,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
             return false;
 
         return GetType() == other.GetType() &&
-            Value == other.Value;
+            Id == other.Id;
     }
 
     public override bool Equals(object? obj)
@@ -75,7 +75,7 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
     }
     public override int GetHashCode()
     {
-        return Value.GetHashCode();
+        return Id.GetHashCode();
     }
     public override string ToString()
     {
@@ -100,6 +100,10 @@ public abstract class Enumeration<TEnum> : IEquatable<Enumeration<TEnum>>
             .Select(fieldInfo =>
                 (TEnum)fieldInfo.GetValue(default)!);
 
-        return fieldsForType.ToDictionary(x => x.Value);
+        return fieldsForType.ToDictionary(x => x.Id);
+    }
+    public static IEnumerable<TEnum> GetValues()
+    {
+        return Enumerations.Values;
     }
 }

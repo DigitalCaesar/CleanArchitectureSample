@@ -5,7 +5,7 @@ using Application.Members.Queries.GetMemberById;
 using DigitalCaesar.Server.Api;
 using Domain.Entities.Members;
 using Domain.Shared;
-using Infrastructure.Authentication;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -51,15 +51,15 @@ public sealed class Role : Entity
         return new Role(id, name, description);
     }
 }
-public sealed class RoleEnum : Enumeration<RoleEnum>
-{
-    public static readonly RoleEnum Registered = new(1, "Registered");
+//public sealed class RoleEnum : Enumeration<RoleEnum>
+//{
+//    public static readonly RoleEnum Registered = new(1, "Registered");
 
-    public ICollection<Permission> Permissions { get; set; }
-    public ICollection<Member> Members { get; set; }
+//    public ICollection<Permission> Permissions { get; set; }
+//    public ICollection<MemberData> Members { get; set; }
 
-    public RoleEnum(int id, string name)
-        : base(id, name) { }
+//    public RoleEnum(int id, string name)
+//        : base(id, name) { }
 
 
-}
+//}

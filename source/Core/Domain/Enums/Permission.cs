@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Authentication;
+﻿namespace Domain.Enums;
 public enum Permission
 {
     ReadMember = 1,

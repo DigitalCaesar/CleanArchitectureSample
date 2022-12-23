@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Infrastructure.Authentication;
 
