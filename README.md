@@ -574,6 +574,20 @@ Steps
 
 Note
 - Not part of the playlist or solution
+- EF queries can be inefficient when looping
+	- Execute a specified SQL statement using ExecuteSqlInterpolatedAsync
+	- Add Dapper including transactions using DbContext.Database & DbContext.Database.GetTransaction
+- use AsNoTracking to remove tracking on objects you are going to fetch without changing - improves performance
+
+### Bonus: EF Options
+
+Read optional settings from the appsettings file
+
+Steps
+1. Add options to appsettings [Api]
+2. Add DatabaseOptions class to hold the settings [Data]
+3. Add DatabaseOptionsStartup to pull the options from appsettings and bind them to the options class [Api]
+4. Add optionsstartup to program.cs
 
 ## Credit
 Milan Jovanovic

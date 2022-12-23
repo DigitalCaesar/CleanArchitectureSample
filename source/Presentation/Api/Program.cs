@@ -3,7 +3,7 @@ using Api.Middleware;
 using Api.Options;
 using Api.Startup;
 using Application.Behaviors;
-using Data;
+using Data.Options;
 using Data.Startup;
 using DigitalCaesar.Server.Api;
 using FluentValidation;
@@ -13,6 +13,7 @@ using Infrastructure.Idempotent;
 using MediatR;
 using Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,8 @@ builder.Services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomai
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 // Database
-builder.Services.AddDataAccessEntityFramework(DataAccessStrategy.UnitOfWork, CachingInitializationStrategy.Concrete);
+builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+builder.Services.AddDataAccessEntityFramework(builder.Configuration);// DataAccessStrategy.UnitOfWork, CachingInitializationStrategy.Concrete);
 // Scheduler
 builder.Services.SetupQuartz();
 // Security

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Data.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Diagnostics.Tracing;
 
 namespace Data.Startup;
 
@@ -7,12 +11,14 @@ namespace Data.Startup;
 /// </summary>
 public static class DataAccessStartup
 {
-    public static void AddDataAccessEntityFramework(this IServiceCollection services, 
-        DataAccessStrategy dataStrategy, 
-        CachingInitializationStrategy cacheStrategy)
-    {
-        DataAccessDatabaseStartup.Implement(services, dataStrategy);
-        DataAccessRepositoryStartup.Register(services, cacheStrategy);
+    public static void AddDataAccessEntityFramework(this IServiceCollection services,
+        IConfiguration configuration)
+    {   
+        //TODO:  Is there a way to do this with IOptions???
+        DataAccessStrategy dataAccessStrategy = Enum.Parse<DataAccessStrategy>(configuration.GetSection("DatabaseOptions:DataAccessStrategy").Value ?? "None");
+        CachingInitializationStrategy cachingStrategy = Enum.Parse<CachingInitializationStrategy>(configuration.GetSection("DatabaseOptions:CachingStrategy").Value ?? "None");
+        DataAccessDatabaseStartup.Implement(services, dataAccessStrategy);
+        DataAccessRepositoryStartup.Register(services, cachingStrategy);
     }
 
 }

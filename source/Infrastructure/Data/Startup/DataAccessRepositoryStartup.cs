@@ -18,17 +18,16 @@ public static class DataAccessRepositoryStartup
     {
         switch(strategy)
         {
-            case CachingInitializationStrategy.None:
-                RegisterRepositories(services);
-                break;
             case CachingInitializationStrategy.Concrete: 
                 RegisterRepositoriesWithCache(services); 
                 break;
             case CachingInitializationStrategy.Decorator:
                 RegisterRepositoriesWithCacheUsingScrutor(services);
                 break;
+            case CachingInitializationStrategy.None:
             default:
-                throw new NotImplementedException("A caching strategy was not selected or the selected strategy has not been implemented.");
+                RegisterRepositories(services);
+                break;
         }
     }
 
