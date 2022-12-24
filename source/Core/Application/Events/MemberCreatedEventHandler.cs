@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Members;
 using Domain.Events;
 using MediatR;
-using Messaging;
+using Infrastructure.Messaging;
 
 namespace Application.Events;
 internal sealed class MemberCreatedEventHandler : INotificationHandler<MemberCreatedEvent>

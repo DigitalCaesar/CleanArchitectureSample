@@ -28,7 +28,6 @@
     <ProjectReference Include="..\..\source\Core\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\source\Infrastructure\Data\Data.csproj" />
     <ProjectReference Include="..\..\source\Infrastructure\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\..\source\Infrastructure\Messaging\Messaging.csproj" />
     <ProjectReference Include="..\..\source\Presentation\Api\Api.csproj" />
   </ItemGroup>
 

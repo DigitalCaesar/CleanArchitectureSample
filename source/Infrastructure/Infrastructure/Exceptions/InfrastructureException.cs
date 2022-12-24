@@ -1,6 +1,6 @@
-﻿namespace Data.Exceptions;
+﻿namespace Infrastructure.Exceptions;
 /// <summary>
-/// An exception that occurred in the Data Access Layer
+/// An exception that occurred in the Infrastructure Layer
 /// </summary>
 public abstract class DataException : Exception
 {

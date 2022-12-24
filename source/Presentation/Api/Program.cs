@@ -3,17 +3,15 @@ using Api.Middleware;
 using Api.Options;
 using Api.Startup;
 using Application.Behaviors;
-using Data.Options;
 using Data.Startup;
 using DigitalCaesar.Server.Api;
 using FluentValidation;
 using Infrastructure.Authentication;
 using Infrastructure.BackgroundJobs;
 using Infrastructure.Idempotent;
+using Infrastructure.Messaging;
 using MediatR;
-using Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 

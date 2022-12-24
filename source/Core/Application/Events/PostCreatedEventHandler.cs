@@ -3,7 +3,7 @@ using Domain.Entities.Posts;
 using Domain.Events;
 using Domain.Shared;
 using MediatR;
-using Messaging;
+using Infrastructure.Messaging;
 
 namespace Application.Events;
 internal sealed class PostCreatedEventHandler : IDomainEventHandler<PostCreatedEvent>
