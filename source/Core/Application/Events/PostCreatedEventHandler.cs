@@ -21,12 +21,12 @@ internal sealed class PostCreatedEventHandler : IDomainEventHandler<PostCreatedE
 
     public async Task Handle(PostCreatedEvent notification, CancellationToken cancellationToken = default)
     {
-        Post? Post = await mPostRepository.GetByIdAsync(notification.Id, cancellationToken);
+        PostEntity? Post = await mPostRepository.GetByIdAsync(notification.Id, cancellationToken);
 
         if (Post is null)
             return;  
 
-        Member? Author = await mMemberRepository.GetByIdAsync(Post.AuthorId, cancellationToken);
+        MemberEntity? Author = await mMemberRepository.GetByIdAsync(Post.AuthorId, cancellationToken);
 
         if (Author is null)
             return;  

@@ -5,9 +5,9 @@ using Domain.ValueObjects;
 namespace Data.Mapping;
 internal static class RoleMapping
 {
-    public static RoleData Map(this Role entity)
+    public static Role Map(this RoleEntity entity)
     {
-        RoleData NewItem = new RoleData()
+        Role NewItem = new Role()
         {
             Id = entity.Id,
             Name = entity.Name.Value,
@@ -16,7 +16,7 @@ internal static class RoleMapping
         return NewItem;
     }
 
-    public static Role Map(this RoleData data)
+    public static RoleEntity Map(this Role data)
     {
         Name? Name = Name.Create(data.Name).Value;
         Description? Description = Description.Create(data.Description).Value;
@@ -26,7 +26,7 @@ internal static class RoleMapping
             Description is null)
             throw new Data.Exceptions.InvalidDataException("RoleData");
 
-        Role NewItem = Role.Create(
+        RoleEntity NewItem = RoleEntity.Create(
             data.Id,
             Name,
             Description);

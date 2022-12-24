@@ -16,7 +16,7 @@ public sealed class JwtProvider : IJwtProvider
         mOptions = options.Value;
     }
 
-    public string Generate(Member member)
+    public string Generate(MemberEntity member)
     {
         var claims = new Claim[] 
         {

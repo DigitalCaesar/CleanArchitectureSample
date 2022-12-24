@@ -1,61 +1,66 @@
-﻿using Data.Models;
+﻿using Domain.Entities.Members;
+using Domain.Entities.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Runtime.InteropServices;
 
 namespace Data.Configurations;
-internal sealed class MemberConfiguration : IEntityTypeConfiguration<MemberData>
+internal sealed class MemberConfiguration : IEntityTypeConfiguration<Member>
 {
 
-    public void Configure(EntityTypeBuilder<MemberData> builder)
+    public void Configure(EntityTypeBuilder<Member> builder)
     {
         builder.ToTable("Members");
         builder.HasKey(m => m.Id);
-        //memberBuilder
-        //    .HasMany(m => m.Roles)
+        //builder
+        //    .HasMany(x => x.Roles)
         //    .WithMany();
         builder
-            .HasData(new MemberData
-            {
-                Id = Guid.Parse("00000003-0000-0000-0000-000000000001"),
-                Username = "User",
-                Email = "user@test.com",
-                FirstName = "First",
-                LastName = "User"
-            },
-            new MemberData
-            {
-                Id = Guid.Parse("00000003-0000-0000-0000-000000000002"),
-                Username = "Author",
-                Email = "Author@test.com",
-                FirstName = "Second",
-                LastName = "User"
-            },
-            new MemberData
-            {
-                Id = Guid.Parse("00000003-0000-0000-0000-000000000003"),
-                Username = "Admin",
-                Email = "Admin@test.com",
-                FirstName = "Third",
-                LastName = "User"
-            });
+            .HasData(
+                Create(
+                    "00000003-0000-0000-0000-000000000001",
+                    "User",
+                    "user@test.com",
+                    "First",
+                    "User"),
+                Create(
+                    "00000003-0000-0000-0000-000000000002",
+                    "Author",
+                    "Author@test.com",
+                    "Second",
+                    "User"),
+                Create(
+                    "00000003-0000-0000-0000-000000000003",
+                    "Admin",
+                    "Admin@test.com",
+                    "Third",
+                    "User"));
         builder
             .HasMany(p => p.Roles)
-            .WithMany(t => t.Members)
-            .UsingEntity(j => j.HasData(
-                new
-                {
-                    MembersId = Guid.Parse("00000003-0000-0000-0000-000000000001"),
-                    RolesId = Guid.Parse("00000004-0000-0000-0000-000000000001")
-                },
-                new
-                {
-                    MembersId = Guid.Parse("00000003-0000-0000-0000-000000000002"),
-                    RolesId = Guid.Parse("00000004-0000-0000-0000-000000000002")
-                },
-                new
-                {
-                    MembersId = Guid.Parse("00000003-0000-0000-0000-000000000003"),
-                    RolesId = Guid.Parse("00000004-0000-0000-0000-000000000003")
-                }));
+            .WithMany()
+            .UsingEntity<MemberRole>(j => j.HasData(
+                Create("00000003-0000-0000-0000-000000000001", Role.Registered),
+                Create("00000003-0000-0000-0000-000000000002", Role.Author),
+                Create("00000003-0000-0000-0000-000000000003", Role.Administrator)
+            ));
+    }
+    private Member Create(string id, string username, string email, string firstname, string lastname)
+    {
+        return new Member
+        {
+            Id = Guid.Parse(id),
+            Username = username,
+            Email = email,
+            FirstName = firstname,
+            LastName = lastname
+        };
+    }
+    private static MemberRole Create(string memberId, Role role)
+    {
+        return new MemberRole
+        {
+            MemberId = Guid.Parse(memberId),
+            RoleId = role.Id
+        };
     }
 }

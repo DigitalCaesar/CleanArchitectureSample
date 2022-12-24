@@ -1,21 +1,18 @@
-﻿using Data.Models;
+﻿using Domain.Entities.Posts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Configurations;
-internal sealed class PostConfiguration : IEntityTypeConfiguration<PostData>
+internal sealed class PostConfiguration : IEntityTypeConfiguration<Post>
 {
 
-    public void Configure(EntityTypeBuilder<PostData> builder)
+    public void Configure(EntityTypeBuilder<Post> builder)
     {
         builder.ToTable("Posts");
         builder.HasKey(p => p.Id);
 
-        //builder
-        //    .HasMany(p => p.Tags)
-        //    .WithMany();
         builder
-            .HasData(new PostData
+            .HasData(new Post
             {
                 Id = Guid.Parse("00000001-0000-0000-0000-000000000001"),
                 Name = "TestPost",

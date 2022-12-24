@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.Posts;
 using Data.Exceptions;
-using Data.Models;
-using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Domain.ValueObjects;
 using Domain.Entities.Tags;
@@ -16,44 +14,43 @@ public class TagRepository : ITagRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Tag?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<TagEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        TagData? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
+        Tag? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
             return default;
 
-        Tag ExistingPost = RawData.Map();
+        TagEntity ExistingPost = RawData.Map();
         return ExistingPost;
     }
 
-    public async Task CreateAsync(Tag tag, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(TagEntity tag, CancellationToken cancellationToken = default)
     {
-        Tag? ExistingItem = await GetByIdAsync(tag.Id, cancellationToken);
+        TagEntity? ExistingItem = await GetByIdAsync(tag.Id, cancellationToken);
         if (ExistingItem is not null)
             throw new DuplicateDataException("Tag Id", tag.Id.ToString());
 
-        TagData NewItem = tag.Map();
+        Tag NewItem = tag.Map();
 
         await mDataContext.Tags.AddAsync(NewItem);
-        await mDataContext.SaveChangesAsync();
     }
 
-    public async Task<List<Tag>> GetAll(CancellationToken cancellationToken = default)
+    public async Task<List<TagEntity>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<TagData> RawData = await mDataContext.Tags.ToListAsync();
-        List<Tag> MappedData = RawData.Select(x => (Tag)x.Map()).ToList();
+        List<Tag> RawData = await mDataContext.Tags.ToListAsync();
+        List<TagEntity> MappedData = RawData.Select(x => (TagEntity)x.Map()).ToList();
         return MappedData;
     }
     public async Task<bool> IsNameUniqueAsync(Name name, CancellationToken cancellationToken)
     {
-        TagData? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Name == name.Value);
+        Tag? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Name == name.Value);
         return (RawData is null);
     }
 
-    public async Task<Tag?> GetByName(string name, CancellationToken cancellationToken)
+    public async Task<TagEntity?> GetByName(string name, CancellationToken cancellationToken)
     {
-        TagData? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Name == name);
-        Tag? MappedData = (RawData is not null) ? RawData.Map() : default!;
+        Tag? RawData = await mDataContext.Tags.FirstOrDefaultAsync(x => x.Name == name);
+        TagEntity? MappedData = (RawData is not null) ? RawData.Map() : default!;
         return MappedData;
     }
 }

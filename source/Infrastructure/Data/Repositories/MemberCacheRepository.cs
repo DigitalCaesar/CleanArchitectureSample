@@ -16,18 +16,18 @@ public class MemberCacheRepository : IMemberRepository
         mMemberRepository = memberRepository;
     }
 
-    public Task CreateAsync(Member member, CancellationToken cancellationToken)
+    public Task CreateAsync(MemberEntity member, CancellationToken cancellationToken)
     {
         return mMemberRepository.CreateAsync(member, cancellationToken);
     }
 
-    public Task<List<Member>> GetAll(CancellationToken cancellationToken)
+    public Task<List<MemberEntity>> GetAll(CancellationToken cancellationToken)
     {
         return mMemberRepository.GetAll(cancellationToken);
     }
 
 
-    public Task<Member?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public Task<MemberEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         string key = $"member-{id}";
 
@@ -40,12 +40,12 @@ public class MemberCacheRepository : IMemberRepository
                 return mMemberRepository.GetByIdAsync(id, cancellationToken);
             });
     }
-    public Task<Member?> GetByEmailAsync(Email email, CancellationToken cancellationToken)
+    public Task<MemberEntity?> GetByEmailAsync(Email email, CancellationToken cancellationToken)
     {
         return mMemberRepository.GetByEmailAsync(email, cancellationToken);
     }
 
-    public Task<Member?> GetByUsernameAsync(UserName username, CancellationToken cancellationToken)
+    public Task<MemberEntity?> GetByUsernameAsync(UserName username, CancellationToken cancellationToken)
     {
         return mMemberRepository.GetByUsernameAsync(username, cancellationToken);
     }

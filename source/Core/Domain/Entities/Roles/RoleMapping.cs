@@ -1,12 +1,11 @@
-﻿using Domain.Entities.Tags;
-using Domain.ValueObjects;
+﻿using Domain.ValueObjects;
 
-namespace Data.Mapping;
-internal static class TagMapping
+namespace Domain.Entities.Roles;
+internal static class RoleMapping
 {
-    public static Tag Map(this TagEntity entity)
+    public static Role Map(this RoleEntity entity)
     {
-        Tag NewItem = new Tag()
+        Role NewItem = new Role()
         {
             Id = entity.Id,
             Name = entity.Name.Value,
@@ -15,7 +14,7 @@ internal static class TagMapping
         return NewItem;
     }
 
-    public static TagEntity Map(this Tag data)
+    public static RoleEntity Map(this Role data)
     {
         Name? Name = Name.Create(data.Name).Value;
         Description? Description = Description.Create(data.Description).Value;
@@ -23,9 +22,9 @@ internal static class TagMapping
         if (
             Name is null ||
             Description is null)
-            throw new Data.Exceptions.InvalidDataException("TagData");
+            throw new Domain.Exceptions.EntityMappingException("RoleData");
 
-        TagEntity NewItem = TagEntity.Create(
+        RoleEntity NewItem = RoleEntity.Create(
             data.Id,
             Name,
             Description);

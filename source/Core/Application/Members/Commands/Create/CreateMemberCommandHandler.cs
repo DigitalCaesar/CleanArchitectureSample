@@ -50,7 +50,7 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
         List<Role> Roles = (DefaultRole is not null) ? new() { DefaultRole } : new();
         
         // Create the new item
-        var NewItem = Member.Create(
+        var NewItem = MemberEntity.Create(
             userName.Value, 
             email.Value, 
             firstName.Value, 

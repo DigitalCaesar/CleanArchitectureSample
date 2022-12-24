@@ -21,7 +21,7 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, string
     public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         Result<Email> email = Email.Create(request.Email);
-        Member? member = await mMemberRepository.GetByEmailAsync(email.Value, cancellationToken);
+        MemberEntity? member = await mMemberRepository.GetByEmailAsync(email.Value, cancellationToken);
         if (member is null)
             return Result.Failure<string>(DomainErrors.Member.InvalidCredentials);
 

@@ -40,10 +40,10 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
             return Result.Failure<Guid>(new Error("Name", "The Name must be unique"));
 
         // Set Tags
-        List<Tag> Tags = new();
+        List<TagEntity> Tags = new();
         foreach(var tag in request.Tags)
         {
-            Tag? FoundItem = await mTagRepository.GetByName(tag, cancellationToken);
+            TagEntity? FoundItem = await mTagRepository.GetByName(tag, cancellationToken);
             if (FoundItem is not null)
                 Tags.Add(FoundItem);
             else
@@ -52,18 +52,18 @@ internal sealed class CreatePostCommandHandler : ICommandHandler<CreatePostComma
                 Result<Description> TagDescription = Description.Create(tag);                
 
                 if(TagName.Successful && TagDescription.Successful)
-                    Tags.Add(Tag.Create(TagName.Value!, TagDescription.Value!));
+                    Tags.Add(TagEntity.Create(TagName.Value!, TagDescription.Value!));
             }
         }
 
         // Get Author
         Guid AuthorId = Guid.Parse(request.AuthorId);
-        Member? Author = await mMemberRepository.GetByIdAsync(AuthorId, cancellationToken);
+        MemberEntity? Author = await mMemberRepository.GetByIdAsync(AuthorId, cancellationToken);
         if (Author is null)
             return Result.Failure<Guid>(new Error("PostAuthor", "A Post must have a valid, existing author."));
 
         // Create the new item
-        var NewItem = Post.Create(
+        var NewItem = PostEntity.Create(
             postName.Value, 
             postContent.Value, 
             AuthorId, 

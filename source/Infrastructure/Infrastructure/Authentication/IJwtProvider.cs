@@ -3,5 +3,5 @@
 namespace Infrastructure.Authentication;
 public interface IJwtProvider
 {
-    string Generate(Member member);
+    string Generate(MemberEntity member);
 }

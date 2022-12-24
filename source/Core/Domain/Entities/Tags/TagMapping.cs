@@ -1,8 +1,7 @@
-﻿using Domain.Entities.Tags;
-using Domain.ValueObjects;
+﻿using Domain.ValueObjects;
 
-namespace Data.Mapping;
-internal static class TagMapping
+namespace Domain.Entities.Tags;
+public static class TagMapping
 {
     public static Tag Map(this TagEntity entity)
     {
@@ -23,7 +22,7 @@ internal static class TagMapping
         if (
             Name is null ||
             Description is null)
-            throw new Data.Exceptions.InvalidDataException("TagData");
+            throw new Domain.Exceptions.EntityMappingException("TagData");
 
         TagEntity NewItem = TagEntity.Create(
             data.Id,

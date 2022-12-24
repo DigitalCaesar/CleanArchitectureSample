@@ -78,8 +78,9 @@ public class MemberController : ApiControllerBase, IEndpointDefinition
     }
     public async Task<IResult> GetMemberList(IMemberRepository repository, CancellationToken cancellationToken = default)
     {
-        var Items = repository.GetAll(cancellationToken);
-        return Results.Ok(Items);
+        List<MemberEntity> Items = await repository.GetAll(cancellationToken);
+        Result<List<MemberEntity>> result = Result.Success(Items);
+        return Results.Ok(result);
     }
     public async Task<IResult> GetMemberById(ISender sender, Guid id, CancellationToken cancellationToken = default)
     {

@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.Posts;
 using Data.Exceptions;
-using Data.Models;
-using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Domain.ValueObjects;
 
@@ -15,38 +13,37 @@ public class PostRepository : IPostRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Post?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<PostEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         //PostData? RawData = await mDataContext.Posts.Include(x => x.Author).FirstOrDefaultAsync(x => x.Id == id);
-        PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
+        Post? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
         if (RawData is null)
             return default;
 
-        Post ExistingPost = RawData.Map();
+        PostEntity ExistingPost = RawData.Map();
         return ExistingPost;
     }
 
-    public async Task CreateAsync(Post post, CancellationToken cancellationToken = default)
+    public async Task CreateAsync(PostEntity post, CancellationToken cancellationToken = default)
     {
-        Post? ExistingItem = await GetByIdAsync(post.Id, cancellationToken);
+        PostEntity? ExistingItem = await GetByIdAsync(post.Id, cancellationToken);
         if (ExistingItem is not null)
             throw new DuplicateDataException("Post Id", post.Id.ToString());
 
-        PostData NewPost = post.Map();
+        Post NewPost = post.Map();
 
         await mDataContext.Posts.AddAsync(NewPost);
-        await mDataContext.SaveChangesAsync();
     }
 
-    public async Task<List<Post>> GetAll(CancellationToken cancellationToken = default)
+    public async Task<List<PostEntity>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<PostData> RawData = await mDataContext.Posts.Include(x => x.Tags).ToListAsync();
-        List<Post> MappedData = RawData.Select(x => (Post)x.Map()).ToList();
+        List<Post> RawData = await mDataContext.Posts.Include(x => x.Tags).ToListAsync();
+        List<PostEntity> MappedData = RawData.Select(x => (PostEntity)x.Map()).ToList();
         return MappedData;
     }
     public async Task<bool> IsNameUniqueAsync(PostName postName, CancellationToken cancellationToken)
     {
-        PostData? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Name == postName.Value);
+        Post? RawData = await mDataContext.Posts.FirstOrDefaultAsync(x => x.Name == postName.Value);
         return (RawData is null);
     }
 }

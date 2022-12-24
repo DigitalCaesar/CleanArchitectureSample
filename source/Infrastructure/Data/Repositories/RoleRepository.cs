@@ -1,7 +1,5 @@
 ﻿using Domain.Entities.Posts;
 using Data.Exceptions;
-using Data.Models;
-using Data.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Domain.ValueObjects;
 using Domain.Entities.Tags;
@@ -17,14 +15,10 @@ public class RoleRepository : IRoleRepository
         mDataContext = dbContext;
     }
 
-    public async Task<Role?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Role?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        RoleData? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Id == id);
-        if (RawData is null)
-            return default;
-
-        Role ExistingPost = RawData.Map();
-        return ExistingPost;
+        Role? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return RawData;
     }
 
     public async Task CreateAsync(Role role, CancellationToken cancellationToken = default)
@@ -33,28 +27,25 @@ public class RoleRepository : IRoleRepository
         if (ExistingItem is not null)
             throw new DuplicateDataException("Role Id", role.Id.ToString());
 
-        RoleData NewItem = role.Map();
+        Role NewItem = role;
 
         await mDataContext.Roles.AddAsync(NewItem);
-        await mDataContext.SaveChangesAsync();
     }
 
     public async Task<List<Role>> GetAll(CancellationToken cancellationToken = default)
     {
-        List<RoleData> RawData = await mDataContext.Roles.ToListAsync();
-        List<Role> MappedData = RawData.Select(x => (Role)x.Map()).ToList();
-        return MappedData;
+        List<Role> RawData = await mDataContext.Roles.ToListAsync(cancellationToken);
+        return RawData;
     }
     public async Task<bool> IsNameUniqueAsync(Name name, CancellationToken cancellationToken)
     {
-        RoleData? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Name == name.Value);
+        Role? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Name == name.Value);
         return (RawData is null);
     }
 
     public async Task<Role?> GetByName(string name, CancellationToken cancellationToken)
     {
-        RoleData? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Name == name);
-        Role? MappedData = (RawData is not null) ? RawData.Map() : default!;
-        return MappedData;
+        Role? RawData = await mDataContext.Roles.FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
+        return RawData;
     }
 }
