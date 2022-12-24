@@ -7,6 +7,7 @@ internal sealed class PermissionConfiguration : IEntityTypeConfiguration<Permiss
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
+        builder.ToTable("Permissions");
         builder.HasKey(x => x.Id);
 
         IEnumerable<Permission> permissions = Enum.GetValues<Domain.Enums.Permission>()

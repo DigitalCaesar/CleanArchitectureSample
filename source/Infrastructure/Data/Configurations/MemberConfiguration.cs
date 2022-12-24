@@ -8,8 +8,8 @@ internal sealed class MemberConfiguration : IEntityTypeConfiguration<MemberData>
 
     public void Configure(EntityTypeBuilder<MemberData> builder)
     {
-        builder
-                .HasKey(m => m.Id);
+        builder.ToTable("Members");
+        builder.HasKey(m => m.Id);
         //memberBuilder
         //    .HasMany(m => m.Roles)
         //    .WithMany();

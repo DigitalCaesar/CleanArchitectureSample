@@ -7,8 +7,8 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<RoleData>
 {
     public void Configure(EntityTypeBuilder<RoleData> builder)
     {
-        builder
-            .HasKey(t => t.Id);
+        builder.ToTable("Roles");
+        builder.HasKey(t => t.Id);
         builder
             .HasData(new RoleData
             {

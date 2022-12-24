@@ -8,8 +8,8 @@ internal sealed class TagConfiguration : IEntityTypeConfiguration<TagData>
 
     public void Configure(EntityTypeBuilder<TagData> builder)
     {
-        builder
-            .HasKey(t => t.Id);
+        builder.ToTable("Tags");
+        builder.HasKey(t => t.Id);
         builder
             .HasData(new TagData
             {

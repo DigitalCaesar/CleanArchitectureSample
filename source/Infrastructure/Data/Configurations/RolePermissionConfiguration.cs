@@ -1,5 +1,4 @@
 ﻿using Data.Models;
-using Domain.Entities.Roles;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

@@ -8,6 +8,7 @@ internal sealed class PostConfiguration : IEntityTypeConfiguration<PostData>
 
     public void Configure(EntityTypeBuilder<PostData> builder)
     {
+        builder.ToTable("Posts");
         builder.HasKey(p => p.Id);
 
         //builder
