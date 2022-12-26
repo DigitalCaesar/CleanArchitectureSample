@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Api.Options;
 
-public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
+public class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly JwtOptions mJwtOptions;
 
@@ -16,6 +16,20 @@ public class JwtBearerOptionsSetup : IConfigureOptions<JwtBearerOptions>
     }
 
     public void Configure(JwtBearerOptions options)
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = mJwtOptions.Issuer,
+            ValidAudience = mJwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mJwtOptions.Secret))
+        };
+    }
+
+    public void Configure(string? name, JwtBearerOptions options)
     {
         options.TokenValidationParameters = new()
         {

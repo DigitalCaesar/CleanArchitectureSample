@@ -554,9 +554,24 @@ Notes
 Configure Roles and Permissions with EntityFramework by defining them in the domain. Designed with a hierarchy where a Member belongs to a Role which is assigned a set of Permissions.
 
 Steps
-1. Add Role to entities
-2. Add Permission to entities
-3. Create navigation properties in Role
+1. Add Role to entities as an Enumeration (SmartEnum) Type
+2. Add Permission to entities with simple properties
+3. Create navigation properties in Role -> ICollection<Permission>, ICollection<Member>
+4. Add RoleConfiguration
+  a. key
+  b. Permission navigation manytomany
+  c. Member navigation manytomany
+  d. Add data to role by getting values in enumeration
+  e. ToTable
+6. Add PermissionConfiguration
+  a. Totable 
+  b. key
+  c. use permission enum to seed data
+7. Add RolePermission to match join table
+  a. composite key
+  b. Back in RoleConfiguration, add usingEntity<RolePermission>
+  c. Add seed to RolePermission, use private method and seed multiple as array
+8. Add Migration and Update
 
 Note
 - Makes use of SmartEnum, this creates a conflict with the Role type created previously
@@ -588,6 +603,27 @@ Steps
 2. Add DatabaseOptions class to hold the settings [Data]
 3. Add DatabaseOptionsStartup to pull the options from appsettings and bind them to the options class [Api]
 4. Add optionsstartup to program.cs
+
+### Permission / Authorization (3) Implementing
+
+Steps
+1. Create PermissionRequirement : IAuthorizationRequirement [Infra]
+2. Create PermissionAuthorizationHandler : AuthorizationHandler<> [Infra]
+  a. Check for MemberId in Claim
+  b. Check for premissions in db (different strategy in next lesson)
+3. Cretae IPermissionService to reference in PermissionAuthorizationHandler
+4. Implement PermissionService
+5. Update Configuration
+  a. AddAuthorization()
+  b. Add IAuthorizationHandler
+6. Add PermissionAuhotoirzationPolicyProvder
+7. Add to startup
+8. Add Policy to endpoint?
+
+
+Notes
+- Following along correctly, but some elements change between the creation and the debug
+- Does not run as is.  The claims are missing from the user
 
 ## Credit
 Milan Jovanovic

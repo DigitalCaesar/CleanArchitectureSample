@@ -32,13 +32,14 @@ public class MemberController : ApiControllerBase, IEndpointDefinition
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members/{id}", GetMemberById)
             .WithName("GetMemberById")
-            .RequireAuthorization(Permission.ReadMember.ToString())
+            .RequireAuthorization()
+            //.RequireAuthorization(Permission.ReadMember.ToString())
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/members", GetMemberList)
             .WithName("GetMemberList")
-            //.RequireAuthorization(Permission.ReadMember.ToString())
-            .AllowAnonymous()
+            .RequireAuthorization(Permission.ReadMember.ToString())
+            //.AllowAnonymous()
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
     }
