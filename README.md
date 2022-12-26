@@ -639,6 +639,45 @@ Notes
 - Claims can get really large if you use multiple permissions
 - Token lifetimes can be used as long as valid - long timeframe can be a problem
 
+Bonus: Static Code Analyzers
+
+Steps
+1. Add EditorConfig
+2. Add StyleCop.Analyzers
+3. Add SonarAnalyzer.CSharp
+4. Add <TreatWarningsAsErrors>true</TreatWarningsAsErrors> in project to enforce the style rules instead of suggest
+5. Update EditorConfig to selectively apply or omit particular rules you like or do not like
+6. Move to solution level to enforce on all projects in the solution
+  a. Add Directory.Build.Prop solution item
+  b. Add configuration for nuget packages, treatwarnings, code analysis and other settings
+  *. How to exclude from Tests?  
+
+Notes
+- Severities are none (no warning/error), warning (warn but do not fail build), error (fail build)
+- dotnet_diagnostic.AA####.severity = none
+-- SA = StyleCope
+-- S = SonarAnalyzer
+-- CA = .Net Code analyzers
+-- IDE = Visual Studio
+
+### Bonus Options
+
+Strategies
+- Add Services.Configure<ApplicationOptions>() to program.cs
+
+Steps
+1. Add ApplicationOptions class with values you want to use
+2. Add to your AppSettings, ApplicationOptions section with key/values matching the properties from step 1
+3. Wire to your program.cs
+	S1.  builder.Services.Configure<ApplicationOptions(builder.Configuration.GetSection(nameof(ApplicationOptions)));
+	S2. 
+		1. Add ApplicationOptionsSetup : IConfigureOptions<ApplicationOptions>
+		2. Wire with builder.Services.ConfigureOptions<ApplicationOptionsSetup>()
+4. Reference IOptions<ApplicationOptions> options with options.Value.PROPERTY where ever you need configurations passed to your program
+
+
+Notes
+- Binding Options does not allow change notification
 
 ## Credit
 Milan Jovanovic
