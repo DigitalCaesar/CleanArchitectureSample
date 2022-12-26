@@ -529,6 +529,7 @@ Steps
 
 Notes
 - Milan put IJwtProvider in Application and then reference from Infrastructure.  The flow should be Infrastructure reference FROM Application not the other way around.  I've plaed in Infrastructure with the idea being the implementation could be moved to a separate Infrastructure layer project.'
+- Does not work as is.  The JwtBearerOptionsSetup has to reference IConfigureNamedOptions instead of IConfigureOptions
 
 ### Permission / Authorization (1) Basic Start
 

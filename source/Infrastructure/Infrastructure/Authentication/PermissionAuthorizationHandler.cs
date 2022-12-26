@@ -16,7 +16,7 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
         string? memberId = context.User.Claims.FirstOrDefault(
-            x => x.Type == ClaimTypes.NameIdentifier)?.Value;//JwtRegisteredClaimNames.Sub)?.Value;  //NOTE:  This is different at the end of the video versus the start???  It changed between when the project was started to debug
+            x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (!Guid.TryParse(memberId, out Guid parsedMemberId))
             return;
@@ -25,7 +25,8 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
 
         IPermissionService permissionService = scope.ServiceProvider.GetRequiredService<IPermissionService>();
 
-        var permissions = await permissionService.GetPermissionsAsync(parsedMemberId);
+        // This is the slow way that calls the database
+        HashSet<string> permissions = await permissionService.GetPermissionsAsync(parsedMemberId);
 
         if (permissions.Contains(requirement.Permission))
             context.Succeed(requirement);
