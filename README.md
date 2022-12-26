@@ -626,6 +626,20 @@ Notes
 - Following along correctly, but some elements change between the creation and the debug
 - Does not run as is.  The claims are missing from the user
 
+### Permissions / Authorization (4) JWT Claims
+
+Change the service from hitting the database to checking the claims directly
+
+Steps
+1. Change JwtProvider (and IJwtProvider) to async add permissions from the service
+2. Add CustomClaims to store the permissions name to a const
+3. Call the new method from the MemberController
+
+Notes
+- Claims can get really large if you use multiple permissions
+- Token lifetimes can be used as long as valid - long timeframe can be a problem
+
+
 ## Credit
 Milan Jovanovic
 Clean Architecture & DDD Series

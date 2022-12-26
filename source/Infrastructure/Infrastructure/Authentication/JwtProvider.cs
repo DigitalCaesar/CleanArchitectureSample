@@ -10,10 +10,12 @@ public sealed class JwtProvider : IJwtProvider
 {
     private readonly JwtOptions mOptions;
     private readonly int cTimeoutInMinutes = 60;
+    private readonly IPermissionService mPermissionService;
 
-    public JwtProvider(IOptions<JwtOptions> options)
+    public JwtProvider(IOptions<JwtOptions> options, IPermissionService permissionService)
     {
         mOptions = options.Value;
+        mPermissionService = permissionService;
     }
 
     public string Generate(MemberEntity member)
@@ -23,6 +25,38 @@ public sealed class JwtProvider : IJwtProvider
             new(JwtRegisteredClaimNames.Sub, member.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, member.Email.Value.ToString())
         };
+
+        var signingCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(mOptions.Secret)),
+            SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            mOptions.Issuer,
+            mOptions.Audience,
+            claims,
+            null,
+            DateTime.UtcNow.AddMinutes(cTimeoutInMinutes),
+            signingCredentials);
+
+        string tokenValue = new JwtSecurityTokenHandler()
+            .WriteToken(token);
+
+        return tokenValue;
+    }
+    public async Task<string> GenerateAsync(MemberEntity member)
+    {
+        var claims = new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Sub, member.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, member.Email.Value.ToString())
+        };
+
+        HashSet<string> permissions = await mPermissionService
+            .GetPermissionsAsync(member.Id);
+
+        foreach (string permission in permissions)
+            claims.Add(new(CustomClaims.Permissions, permission));
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(

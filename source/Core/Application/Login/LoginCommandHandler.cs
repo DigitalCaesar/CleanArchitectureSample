@@ -25,7 +25,7 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, string
         if (member is null)
             return Result.Failure<string>(DomainErrors.Member.InvalidCredentials);
 
-        string token = mJwtProvider.Generate(member);
+        string token = await mJwtProvider.GenerateAsync(member);
 
         return token;
     }
