@@ -41,6 +41,7 @@ public static class DataAccessRepositoryStartup
     }
     private static void RegisterRepositoriesWithCache(IServiceCollection services)
     {
+        services.AddMemoryCache();
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<MemberRepository>();
@@ -50,6 +51,7 @@ public static class DataAccessRepositoryStartup
     }
     private static void RegisterRepositoriesWithCacheUsingScrutor(IServiceCollection services)
     {
+        services.AddMemoryCache();
         //services.AddScoped<IPostRepository, PostRepository>();
         //services.AddScoped<ITagRepository, TagRepository>();
         //services.AddScoped<IMemberRepository, MemberRepository>();

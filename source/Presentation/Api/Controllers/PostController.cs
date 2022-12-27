@@ -4,6 +4,7 @@ using Application.Posts.Queries.GetPostById;
 using Data.Repositories;
 using DigitalCaesar.Server.Api;
 using Domain.Entities.Posts;
+using Domain.Enums;
 using Domain.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +21,18 @@ public sealed class PostController : ApiControllerBase, IEndpointDefinition
         WebApplication webApp = (WebApplication)app;
         webApp.MapPost("/api/posts", CreatePost)
             .WithName("CreatePost")
+            .RequireAuthorization(Permission.WriteMember.ToString())
             .AllowAnonymous()
             .Produces(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/posts/{id}", GetPostById)
             .WithName("GetPostById")
-            .AllowAnonymous()
+            .RequireAuthorization(Permission.ReadMember.ToString())
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
         webApp.MapGet("/api/posts", GetPostList)
             .WithName("GetPostList")
-            .AllowAnonymous()
+            .RequireAuthorization(Permission.ReadMember.ToString())
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest, "application/problem+json");
     }

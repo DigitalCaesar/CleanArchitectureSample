@@ -2,9 +2,9 @@
 using Quartz;
 
 namespace Infrastructure.BackgroundJobs;
-public static class Startup
+public static class BackgroundJobStartup
 {
-    public static void SetupQuartz(this IServiceCollection services)
+    public static IServiceCollection AddScheduler(this IServiceCollection services)
     {
         services.AddQuartz(configure =>
         {
@@ -23,6 +23,7 @@ public static class Startup
         });
         services.AddQuartzHostedService();
 
+        return services;
     }
 }
 

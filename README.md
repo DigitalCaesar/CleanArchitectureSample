@@ -639,7 +639,7 @@ Notes
 - Claims can get really large if you use multiple permissions
 - Token lifetimes can be used as long as valid - long timeframe can be a problem
 
-Bonus: Static Code Analyzers
+### Bonus: Static Code Analyzers
 
 Steps
 1. Add EditorConfig
@@ -675,9 +675,138 @@ Steps
 		2. Wire with builder.Services.ConfigureOptions<ApplicationOptionsSetup>()
 4. Reference IOptions<ApplicationOptions> options with options.Value.PROPERTY where ever you need configurations passed to your program
 
+ApplicationOptions.cs
+```
+public class ApplicationOptions
+{
+	public string ApplicationName { get; set; }
+}
+```
+
+ApplicationOptionsStartup.cs
+```
+public class ApplicationOptionsStartup : IConfigurationOptions<ApplicationOptions>
+{
+	private const string cSectionName = nameof(ApplicationOptions);
+	private readonly IConfiguration mConfiguration;
+	
+	public ApplicationOptionsStartup(IConfiguration configuration)
+	{
+		mConfiguration = configuration;
+	}
+
+	public void Configure(ApplicationOptions options)
+	{
+		mConfiguration.GetSection(cSectionName).Bind(options);
+	}
+}
+```
+
+Program.cs
+```
+builder.Services.ConfigureOptions<ApplicationOptionsStartup>();
+```
+
+Service.cs
+```
+public class Service
+{
+	private ApplicationOptions mOptions;
+	private string ApplicationName;
+
+	public Service(ApplicationOptions options)
+	{
+		mOptions = options;
+		ApplicationName = options.ApplicationName;
+	}
+}
+```
+
 
 Notes
 - Binding Options does not allow change notification
+
+### Bonus Dependency Injection
+
+Use extension methods to segregate different types of startup routines into an easier to maintain collection of startup files.  
+
+Strategies
+1. extension method for IServiceCollection
+2. Use IServiceInstaller classes and use reflection to find and execute
+
+Steps for Strategy 1
+1. Create a static class with a static method returning an IServiceCollection and taking in a this IServiceCollection
+2. Move items from Program.cs to the new static method adjusting
+
+StartupExtension.cs
+```
+public static class StartupExtension
+{
+	public static IServiceCollection AddSomeStartup(this IServiceCollection services, IConfiguration configuration)
+	{
+		services.AddSingleton<ISomeInterface, SomeClass>(config => config.Option = configuration.Option);
+	}
+}
+```
+
+Program.cs
+```
+builder.Services.AddSomeStartup(builder.Configuration);
+```
+
+Steps for Strategy 2
+1. Create IServiceInstaller with void Install(IServiceCollection, IConfiguration)
+2. Create one installer for each startup method
+3. Create an extension method that takes in an array of Assemblies to search for IServiceInstaller
+
+IServiceInstaller.cs
+```
+public interface IServiceInstaller
+{
+	public void Install(IServiceCollection services, IConfiguration configuration)
+	{
+		services.AddSingleton<ISomeInterface, SomeClass>(config => config.Option = configuration.Option);
+	}
+}
+```
+
+SomeServiceStartup.cs
+```
+public class SomeServiceInstaller : IServiceInstaller
+{
+	public IServiceCollection Install(IServiceCollection services, IConfiguration configuration)
+}
+```
+
+StartupExtension.cs
+```
+public static class StartupExtension
+{
+	public static IServiceCollection InstallServices(this IServiceCollection services, IConfiguration configuration, params Assembly[] assemblies)
+	{
+		IEnumerable<IServiceInstaller> serviceInstallers = assemblies
+			.SelectMany(a => a.DefinedTypes)
+			.Where(IsAssignableToType<IServiceInstaller>)
+			.Select(Activator.CreateInstance)
+			.Case<IServiceInstaller>();
+
+		foreach(IServiceInstaller serviceInstaller in serviceInstallers)
+			serviceInstaller.Install(services, configuration);
+
+		return services;
+
+		static bool IsAssignableToType<T>(TypeInfo typeInfo) => 
+			typeof(T).IsAssignableFrom(typeInfo) &&
+			!typeInfo.IsInterface &&
+			!typeInfo.IsAbstract;
+	}
+}
+```
+
+
+Notes
+- Either have one class with multiple extension methods or several classes with a single extension method
+- returning IServiceColelction allows chaining of methods.
 
 ## Credit
 Milan Jovanovic
