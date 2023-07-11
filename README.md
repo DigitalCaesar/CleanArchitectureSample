@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/DigitalCaesarLLC/847f6d6f-1d95-4c58-9972-234aa4f53b4e/0d3af12e-3d22-4cff-baba-02d83592bd0d/_apis/work/boardbadge/8801b98b-849f-47bf-961f-bcbe55e65fe1)](https://dev.azure.com/DigitalCaesarLLC/847f6d6f-1d95-4c58-9972-234aa4f53b4e/_boards/board/t/0d3af12e-3d22-4cff-baba-02d83592bd0d/Microsoft.RequirementCategory)
 # CleanArchitectureSample
 A sample for best practices and experimenting with Clean Architecture and CQRS
 
